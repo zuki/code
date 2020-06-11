@@ -32,8 +32,8 @@ OBJS := $(SRCS:%=$(OBJDIR)/%.o)
 DEPS := $(OBJS:.o=.d)
 LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lm -lfreetype -lpng16
 
-SDL2INCS := -I/Users/dspace/develop/game/game_cpp/External/SDL/include
-SDL2LIBS := -L/Users/dspace/develop/game/game_cpp/External/SDL/lib/mac
+SDL2INCS := -I../External/SDL/include
+SDL2LIBS := -L../External/SDL/lib/mac
 CPPFLAGS += $(SDL2INCS) -I.
 LDFLAGS += $(SDL2LIBS) $(LIBS)
 
