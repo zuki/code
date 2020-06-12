@@ -17,4 +17,4 @@ using ::fpclassify;
 ```
 
 現象は[Stack Overflowのこの問題](https://stackoverflow.com/questions/58628377/catalina-c-using-cmath-headers-yield-error-no-member-named-signbit-in-th)
-と同じであり、紹介されている方法のうち`Gralex`氏の方法で解決した。
+と同じであり、紹介されている方法のうち`Gralex`氏の方法で解決した。
