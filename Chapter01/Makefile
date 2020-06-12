@@ -23,7 +23,7 @@ TARGET = $(BUILDDIR)/a.out
 ## Compiler options
 CC = clang
 CFLAGS = -O2 -Wall -std=gnu11
-CXX = clang
+CXX = clang++
 CXXFLAGS = -O2 -Wall -std=gnu++11
 LDFLAGS =
 
