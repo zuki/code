@@ -1,13 +1,13 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #include "AnimSpriteComponent.h"
-#include "Math.h"
+#include "MathLocal.h"
 
 AnimSpriteComponent::AnimSpriteComponent(Actor* owner, int drawOrder)
 	:SpriteComponent(owner, drawOrder)
@@ -25,7 +25,7 @@ void AnimSpriteComponent::Update(float deltaTime)
 		// Update the current frame based on frame rate
 		// and delta time
 		mCurrFrame += mAnimFPS * deltaTime;
-		
+
 		// Wrap current frame if needed
 		while (mCurrFrame >= mAnimTextures.size())
 		{
