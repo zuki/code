@@ -27,13 +27,33 @@ void AnimSpriteComponent::Update(float deltaTime)
 		mCurrFrame += mAnimFPS * deltaTime;
 
 		// Wrap current frame if needed
-		while (mCurrFrame >= mAnimTextures.size())
+		if (mLoop)
 		{
-			mCurrFrame -= mAnimTextures.size();
+			while (mCurrFrame >= mStartFrame + mFrameSize)
+			{
+				mCurrFrame -= mFrameSize;
+			}
 		}
-
+		else if (mCurrFrame >= mStartFrame + mFrameSize)
+		{
+			mCurrFrame = mStartFrame + mFrameSize - 1;
+		}
+		int idx = static_cast<int>(mCurrFrame);
+		SDL_Log("idx: %d", idx);
 		// Set the current texture
-		SetTexture(mAnimTextures[static_cast<int>(mCurrFrame)]);
+		SetTexture(mAnimTextures[idx]);
+	}
+}
+
+void AnimSpriteComponent::SetAnimation(int start, int size, bool loop)
+{
+	if (mAnimTextures.size() > 0)
+	{
+		mCurrFrame = start;
+		mStartFrame = start;
+		mFrameSize = size;
+		mLoop = loop;
+		SetTexture(mAnimTextures[start]);
 	}
 }
 
