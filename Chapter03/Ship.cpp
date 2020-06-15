@@ -63,7 +63,6 @@ void Ship::ActorInput(const uint8_t* keyState)
 			// at center of the screen with rotate 0
 			SetPosition(Vector2(512.0f, 384.0f));
 			SetRotation(0.0f);
-			ast->SetState(EDead);
 			break;
 		}
 	}
