@@ -19,4 +19,5 @@ public:
 private:
 	class CircleComponent* mCircle;
 	float mLaserCooldown;
+	float mMissingPeriod;
 };

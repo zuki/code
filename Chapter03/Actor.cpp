@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -34,7 +34,7 @@ Actor::~Actor()
 
 void Actor::Update(float deltaTime)
 {
-	if (mState == EActive)
+	if (mState == EActive || mState == EPaused)
 	{
 		UpdateComponents(deltaTime);
 		UpdateActor(deltaTime);

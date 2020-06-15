@@ -17,6 +17,7 @@
 Ship::Ship(Game* game)
 	:Actor(game)
 	,mLaserCooldown(0.0f)
+	,mMissingPeriod(0.0f)
 {
 	// Create a sprite component
 	SpriteComponent* sc = new SpriteComponent(this, 150);
@@ -30,6 +31,7 @@ Ship::Ship(Game* game)
 	ic->SetCounterClockwiseKey(SDL_SCANCODE_D);
 	ic->SetMaxForwardSpeed(300.0f);
 	ic->SetMaxAngularSpeed(Math::TwoPi);
+	ic->SetWrapping(false);
 
 	// Create a circle component (for collision)
 	mCircle = new CircleComponent(this);
@@ -39,6 +41,13 @@ Ship::Ship(Game* game)
 void Ship::UpdateActor(float deltaTime)
 {
 	mLaserCooldown -= deltaTime;
+	mMissingPeriod -= deltaTime;
+	if (GetState() == EPaused && mMissingPeriod <= 0.0f)
+	{
+		SetState(EActive);
+		SetPosition(Vector2(512.0f, 384.0f));
+		SetRotation(0.0f);
+	}
 }
 
 void Ship::ActorInput(const uint8_t* keyState)
@@ -59,12 +68,11 @@ void Ship::ActorInput(const uint8_t* keyState)
 		if (Intersect(*mCircle, *(ast->GetCircle())))
 		{
 			// The first asteroid we intersect with,
-			// set the asteroid to dead and reset this
-			// at center of the screen with rotate 0
-			SetPosition(Vector2(512.0f, 384.0f));
-			SetRotation(0.0f);
+			// set ourselves and the asteroid to dead
+			SetState(EPaused);
+			SetPosition(Vector2(-100.0f, -100.0f));
+			mMissingPeriod = 1.0f;
 			break;
 		}
 	}
-
 }
