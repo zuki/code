@@ -43,3 +43,12 @@ using ::fpclassify;
 
 1. 宇宙船と小惑星の衝突判定を追加し、衝突したら、宇宙船を位置は画面中心、回転角ゼロでリセット
 2. 衝突時、宇宙船を1秒消去し、その後、上記の条件で現れる
+
+### `libpng warinig: iCCP: known incorrect sRGB profile`対策
+
+表題でgoogleしてヒットした[ここ](https://www.henjins-toolbox.tech/entry/opencv_error1)の記載通り
+以下のコマンドでpngファイルを処理したところ警告がなくなった。
+
+```
+convert Ship.png -strip Ship.png
+```
