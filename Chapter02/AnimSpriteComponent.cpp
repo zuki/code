@@ -39,7 +39,7 @@ void AnimSpriteComponent::Update(float deltaTime)
 			mCurrFrame = mStartFrame + mFrameSize - 1;
 		}
 		int idx = static_cast<int>(mCurrFrame);
-		SDL_Log("idx: %d", idx);
+
 		// Set the current texture
 		SetTexture(mAnimTextures[idx]);
 	}
