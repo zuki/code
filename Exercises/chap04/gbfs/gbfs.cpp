@@ -41,13 +41,6 @@ float ComputeHeuristic(const WeightedGraphNode* a, const WeightedGraphNode* b)
 	return x + y;
 }
 
-float ComputeWeight(const WeightedGraphNode* a, const WeightedGraphNode* b)
-{
-	float x = (a->name % 10) - (b->name % 10);
-	float y = (a->name / 10) - (b->name / 10);
-	return x + y;
-}
-
 bool GBFS(const WeightedGraph& g, const WeightedGraphNode* start,
 	const WeightedGraphNode* goal, GBFSMap& outMap)
 {
@@ -107,13 +100,11 @@ std::string join(const std::vector<WeightedEdge*>& v, const char * delim = 0)
 	std::string s;
 	if (!v.empty())
 	{
-		s += "(" + std::to_string(v[0]->mFrom->name) + ", " + std::to_string(v[0]->mTo->name) +
-		   ", " + std::to_string(v[0]->mWeight) + ")";
+		s += "(" + std::to_string(v[0]->mFrom->name) + ", " + std::to_string(v[0]->mTo->name) + ")";
 		for (decltype(v.size()) i = 1, c = v.size(); i < c; i++)
 		{
 			if (delim) s += delim;
-			s += "(" + std::to_string(v[i]->mFrom->name) + ", " + std::to_string(v[i]->mTo->name)
-				 + ", " + std::to_string(v[i]->mWeight) + ")";
+			s += "(" + std::to_string(v[i]->mFrom->name) + ", " + std::to_string(v[i]->mTo->name) + ")";
 		}
 	}
 	return s;
@@ -176,7 +167,7 @@ void testHeuristic()
 				WeightedEdge* e = new WeightedEdge;
 				e->mFrom = node;
 				e->mTo = g.mNodes[(i - 1) * 5 + j];
-				e->mWeight = ComputeWeight(node, g.mNodes[0]);
+				e->mWeight = 1.0f;
 				node->mEdges.emplace_back(e);
 			}
 			if (i < 4)
@@ -184,7 +175,7 @@ void testHeuristic()
 				WeightedEdge* e = new WeightedEdge;
 				e->mFrom = node;
 				e->mTo = g.mNodes[(i + 1) * 5 + j];
-				e->mWeight = ComputeWeight(node, g.mNodes[0]);
+				e->mWeight = 1.0f;
 				node->mEdges.emplace_back(e);
 			}
 			if (j > 0)
@@ -192,7 +183,7 @@ void testHeuristic()
 				WeightedEdge* e = new WeightedEdge;
 				e->mFrom = node;
 				e->mTo = g.mNodes[i * 5 + j - 1];
-				e->mWeight = ComputeWeight(node, g.mNodes[0]);
+				e->mWeight = 1.0f;
 				node->mEdges.emplace_back(e);
 			}
 			if (j < 4)
@@ -200,7 +191,7 @@ void testHeuristic()
 				WeightedEdge* e = new WeightedEdge;
 				e->mFrom = node;
 				e->mTo = g.mNodes[i * 5 + j + 1];
-				e->mWeight = ComputeWeight(node, g.mNodes[0]);
+				e->mWeight = 1.0f;
 				node->mEdges.emplace_back(e);
 			}
 		}
