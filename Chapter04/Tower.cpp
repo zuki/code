@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -18,20 +18,21 @@ Tower::Tower(class Game* game)
 {
 	SpriteComponent* sc = new SpriteComponent(this, 200);
 	sc->SetTexture(game->GetTexture("Assets/Tower.png"));
-	
+
 	mMove = new MoveComponent(this);
 	//mMove->SetAngularSpeed(Math::Pi);
-	
+
 	mNextAttack = AttackTime;
 }
 
 void Tower::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
-	
+
 	mNextAttack -= deltaTime;
 	if (mNextAttack <= 0.0f)
 	{
+		// 最も近い敵が攻撃範囲内にある時、攻撃する
 		Enemy* e = GetGame()->GetNearestEnemy(GetPosition());
 		if (e != nullptr)
 		{

@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -22,7 +22,7 @@ Grid::Grid(class Game* game)
 	{
 		mTiles[i].resize(NumCols);
 	}
-	
+
 	// Create tiles
 	for (size_t i = 0; i < NumRows; i++)
 	{
@@ -32,12 +32,12 @@ Grid::Grid(class Game* game)
 			mTiles[i][j]->SetPosition(Vector2(TileSize/2.0f + j * TileSize, StartY + i * TileSize));
 		}
 	}
-	
+
 	// Set start/end tiles
 	GetStartTile()->SetTileState(Tile::EStart);
 	GetEndTile()->SetTileState(Tile::EBase);
-	
-	// Set up adjacency lists
+
+	// 隣接タイルリスト（上下左右に接しているタイルのリスト）の作成
 	for (size_t i = 0; i < NumRows; i++)
 	{
 		for (size_t j = 0; j < NumCols; j++)
@@ -60,17 +60,17 @@ Grid::Grid(class Game* game)
 			}
 		}
 	}
-	
-	// Find path (in reverse)
+
+	// パスの検索（逆順）
 	FindPath(GetEndTile(), GetStartTile());
 	UpdatePathTiles(GetStartTile());
-	
+
 	mNextEnemy = EnemyTime;
 }
 
 void Grid::SelectTile(size_t row, size_t col)
 {
-	// Make sure it's a valid selection
+	// 選択が正しい（開始タイルでもゴールタイルでもない）ことを保証
 	Tile::TileState tstate = mTiles[row][col]->GetTileState();
 	if (tstate != Tile::EStart && tstate != Tile::EBase)
 	{
@@ -98,7 +98,7 @@ void Grid::ProcessClick(int x, int y)
 	}
 }
 
-// Implements A* pathfinding
+// A*によるパス探索の実装
 bool Grid::FindPath(Tile* start, Tile* goal)
 {
 	for (size_t i = 0; i < NumRows; i++)
@@ -110,13 +110,13 @@ bool Grid::FindPath(Tile* start, Tile* goal)
 			mTiles[i][j]->mInClosedSet = false;
 		}
 	}
-	
+
 	std::vector<Tile*> openSet;
-	
+
 	// Set current node to start, and add to closed set
 	Tile* current = start;
 	current->mInClosedSet = true;
-	
+
 	do
 	{
 		// Add adjacent nodes to open set
@@ -126,7 +126,7 @@ bool Grid::FindPath(Tile* start, Tile* goal)
 			{
 				continue;
 			}
-			
+
 			// Only check nodes that aren't in the closed set
 			if (!neighbor->mInClosedSet)
 			{
@@ -156,13 +156,13 @@ bool Grid::FindPath(Tile* start, Tile* goal)
 				}
 			}
 		}
-		
+
 		// If open set is empty, all possible paths are exhausted
 		if (openSet.empty())
 		{
 			break;
 		}
-		
+
 		// Find lowest cost node in open set
 		auto iter = std::min_element(openSet.begin(), openSet.end(),
 									 [](Tile* a, Tile* b) {
@@ -175,7 +175,7 @@ bool Grid::FindPath(Tile* start, Tile* goal)
 		current->mInClosedSet = true;
 	}
 	while (current != goal);
-	
+
 	// Did we find a path?
 	return (current == goal) ? true : false;
 }
@@ -193,7 +193,7 @@ void Grid::UpdatePathTiles(class Tile* start)
 			}
 		}
 	}
-	
+
 	Tile* t = start->mParent;
 	while (t != GetEndTile())
 	{
@@ -214,7 +214,9 @@ void Grid::BuildTower()
 		}
 		else
 		{
-			// This tower would block the path, so don't allow build
+			// ゴールに至るパスがなくなる場合はタワーを建てれない
+			// 常にゴールへのパスを作成しておく。
+			// 敵はこのパスに沿って進む
 			mSelectedTile->mBlocked = false;
 			FindPath(GetEndTile(), GetStartTile());
 		}
@@ -222,11 +224,13 @@ void Grid::BuildTower()
 	}
 }
 
+// 開始タイルは x/y = 0/3 とする
 Tile* Grid::GetStartTile()
 {
 	return mTiles[3][0];
 }
 
+// ゴールタイルは x/y = 15/3 とする
 Tile* Grid::GetEndTile()
 {
 	return mTiles[3][15];
@@ -235,7 +239,7 @@ Tile* Grid::GetEndTile()
 void Grid::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
-	
+
 	// Is it time to spawn a new enemy?
 	mNextEnemy -= deltaTime;
 	if (mNextEnemy <= 0.0f)

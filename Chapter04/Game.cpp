@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -22,7 +22,7 @@ Game::Game()
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -32,21 +32,21 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 4)", 100, 100, 1024, 768, 0);
 	if (!mWindow)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!mRenderer)
 	{
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	if (IMG_Init(IMG_INIT_PNG) == 0)
 	{
 		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
@@ -56,7 +56,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -82,19 +82,20 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
 	if (keyState[SDL_SCANCODE_ESCAPE])
 	{
 		mIsRunning = false;
 	}
-	
+
+	// Bキーでタワー作成
 	if (keyState[SDL_SCANCODE_B])
 	{
 		mGrid->BuildTower();
 	}
-	
-	// Process mouse
+
+	// マウス（左クリック）の処理
 	int x, y;
 	Uint32 buttons = SDL_GetMouseState(&x, &y);
 	if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT)
@@ -160,7 +161,7 @@ void Game::GenerateOutput()
 {
 	SDL_SetRenderDrawColor(mRenderer, 34, 139, 34, 255);
 	SDL_RenderClear(mRenderer);
-	
+
 	// Draw all sprite components
 	for (auto sprite : mSprites)
 	{
@@ -305,10 +306,11 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 	mSprites.erase(iter);
 }
 
+// 最も近い敵を探す（2点間の距離（の2乗）で判断）
 Enemy* Game::GetNearestEnemy(const Vector2& pos)
 {
 	Enemy* best = nullptr;
-	
+
 	if (mEnemies.size() > 0)
 	{
 		best = mEnemies[0];
@@ -324,6 +326,6 @@ Enemy* Game::GetNearestEnemy(const Vector2& pos)
 			}
 		}
 	}
-	
+
 	return best;
 }

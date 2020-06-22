@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,7 +20,7 @@ Enemy::Enemy(class Game* game)
 {
 	// Add to enemy vector
 	game->GetEnemies().emplace_back(this);
-	
+
 	SpriteComponent* sc = new SpriteComponent(this);
 	sc->SetTexture(game->GetTexture("Assets/Airplane.png"));
 	// Set position at start tile
@@ -46,8 +46,8 @@ Enemy::~Enemy()
 void Enemy::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
-	
-	// Am I near the end tile?
+
+	// ゴールタイルに近づいたら消滅する
 	Vector2 diff = GetPosition() - GetGame()->GetGrid()->GetEndTile()->GetPosition();
 	if (Math::NearZero(diff.Length(), 10.0f))
 	{
