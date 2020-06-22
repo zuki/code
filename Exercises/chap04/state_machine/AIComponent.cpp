@@ -13,7 +13,7 @@ AIComponent::AIComponent(class Actor* owner)
 
 void AIComponent::Update(float deltaTIme)
 {
-    if (mCurrentState != nullptr)
+    if (mCurrentState)
     {
         mCurrentState->Update(deltaTIme);
     }
