@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -24,10 +24,10 @@ protected:
 	class AIComponent* mOwner;
 };
 
-class AIPatrol : public AIState
+class AIWait : public AIState
 {
 public:
-	AIPatrol(class AIComponent* owner)
+	AIWait(class AIComponent* owner)
 		:AIState(owner)
 	{ }
 
@@ -37,13 +37,13 @@ public:
 	void OnExit() override;
 
 	const char* GetName() const override
-	{ return "Patrol"; }
+	{ return "Wait"; }
 };
 
-class AIDeath : public AIState
+class AIAlert : public AIState
 {
 public:
-	AIDeath(class AIComponent* owner)
+	AIAlert(class AIComponent* owner)
 		:AIState(owner)
 	{ }
 
@@ -52,7 +52,7 @@ public:
 	void OnExit() override;
 
 	const char* GetName() const override
-	{ return "Death"; }
+	{ return "Alert"; }
 };
 
 class AIAttack : public AIState
@@ -68,4 +68,19 @@ public:
 
 	const char* GetName() const override
 	{ return "Attack"; }
+};
+
+class AIDestroy : public AIState
+{
+public:
+	AIDestroy(class AIComponent* owner)
+		:AIState(owner)
+	{ }
+
+	void Update(float deltaTime) override;
+	void OnEnter() override;
+	void OnExit() override;
+
+	const char* GetName() const override
+	{ return "Destroy"; }
 };

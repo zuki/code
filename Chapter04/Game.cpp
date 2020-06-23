@@ -15,6 +15,7 @@
 #include "Enemy.h"
 #include "AIComponent.h"
 #include "AIState.h"
+#include "Random.h"
 
 Game::Game()
 :mWindow(nullptr)
@@ -52,6 +53,8 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
 		return false;
 	}
+
+	Random::Init();
 
 	LoadData();
 

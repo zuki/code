@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -21,6 +21,8 @@ public:
 	virtual void Update(float deltaTime);
 	// Process input for this component
 	virtual void ProcessInput(const uint8_t* keyState) {}
+
+	class Actor* GetOwner() const { return mOwner; }
 
 	int GetUpdateOrder() const { return mUpdateOrder; }
 protected:

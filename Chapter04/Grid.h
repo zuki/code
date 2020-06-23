@@ -28,6 +28,11 @@ public:
 	class Tile* GetStartTile();
 	class Tile* GetEndTile();
 
+	// 画面上の位置 x/yのタイルは最適パスに接しているか
+	bool IsAdjacent(int x, int y);
+	// 指定した位置にあるタワーを廃棄する
+	void DestroyTower(int x, int y);
+
 	void UpdateActor(float deltaTime) override;
 private:
 	// 指定したタイルを選択する

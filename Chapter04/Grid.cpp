@@ -224,6 +224,54 @@ void Grid::BuildTower()
 	}
 }
 
+void Grid::DestroyTower(int x, int y)
+{
+	ProcessClick(x, y);
+	mSelectedTile->mBlocked = false;
+	FindPath(GetEndTile(), GetStartTile());
+	UpdatePathTiles(GetStartTile());
+}
+
+// 画面上の位置 x/yのタイルは最適パスに接しているか
+bool Grid::IsAdjacent(int x, int y)
+{
+	bool adjacent = false;
+	y -= static_cast<int>(StartY - TileSize / 2);
+	if (y >= 0)
+	{
+		x /= static_cast<int>(TileSize);
+		y /= static_cast<int>(TileSize);
+		if (x > 0 && mTiles[y][x-1]->GetTileState() == Tile::EPath)	// 左がパス
+			adjacent = true;
+		if (x < (static_cast<int>(NumCols) - 1) && mTiles[y][x+1]->GetTileState() == Tile::EPath) // 右がパス
+			adjacent = true;
+		if (y > 0 && mTiles[y-1][x]->GetTileState() == Tile::EPath)  // 上がパス
+			adjacent = true;
+		if ((y < static_cast<int>(NumRows) - 1) && mTiles[y+1][x]->GetTileState() == Tile::EPath)   // 下がパス
+			adjacent = true;
+		if (x > 0 && y > 0 && mTiles[y-1][x-1]->GetTileState() == Tile::EPath)	// 左上がパス
+			adjacent = true;
+		if (y > 0 && (x < static_cast<int>(NumCols) - 1) && mTiles[y-1][x+1]->GetTileState() == Tile::EPath) // 右上がパス
+			adjacent = true;
+		if (x > 0 && (y < static_cast<int>(NumRows) - 1) && mTiles[y+1][x-1]->GetTileState() == Tile::EPath) // 左下がパス
+			adjacent = true;
+		if ((x < static_cast<int>(NumCols) - 1) && (y < static_cast<int>(NumRows) - 1)	// 右下がパスか
+		     && mTiles[y+1][x+1]->GetTileState() == Tile::EPath)
+			adjacent = true;
+		if (x > 1 && mTiles[y][x-2]->GetTileState() == Tile::EPath)	// 2つ左がパス
+			adjacent = true;
+		if (x < (static_cast<int>(NumCols) - 2) && mTiles[y][x+2]->GetTileState() == Tile::EPath) // 2つ右がパス
+			adjacent = true;
+		if (y > 1 && mTiles[y-2][x]->GetTileState() == Tile::EPath)  // 2つ上がパス
+			adjacent = true;
+		if ((y < static_cast<int>(NumRows) - 2) && mTiles[y+2][x]->GetTileState() == Tile::EPath)   // 2つ下がパス
+			adjacent = true;
+
+	}
+	return adjacent;
+}
+
+
 // 開始タイルは x/y = 0/3 とする
 Tile* Grid::GetStartTile()
 {
