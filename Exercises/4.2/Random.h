@@ -1,14 +1,14 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #pragma  once
 #include <random>
-#include "Math.h"
+#include "MathLocal.h"
 
 class Random
 {
@@ -21,7 +21,7 @@ public:
 
 	// Get a float between 0.0f and 1.0f
 	static float GetFloat();
-	
+
 	// Get a float from the specified range
 	static float GetFloatRange(float min, float max);
 
