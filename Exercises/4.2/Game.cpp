@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -10,6 +10,7 @@
 #include "SDL/SDL_image.h"
 #include <algorithm>
 #include "Actor.h"
+#include "Board.h"
 #include "SpriteComponent.h"
 #include "Random.h"
 
@@ -19,7 +20,7 @@ Game::Game()
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -29,21 +30,21 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-	
-	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 4)", 100, 100, 1024, 768, 0);
+
+	mWindow = SDL_CreateWindow("Game Programming in C++ (Exercise 4.2)", 100, 100, 1024, 768, 0);
 	if (!mWindow)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!mRenderer)
 	{
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	if (IMG_Init(IMG_INIT_PNG) == 0)
 	{
 		SDL_Log("Unable to initialize SDL_image: %s", SDL_GetError());
@@ -55,7 +56,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -79,7 +80,7 @@ void Game::ProcessInput()
 			case SDL_QUIT:
 				mIsRunning = false;
 				break;
-			// Process mouse button event
+			// マウスで落とすカラムを指定
 			case SDL_MOUSEBUTTONDOWN:
 				if (event.button.button == SDL_BUTTON_LEFT &&
 					!mBoardState.IsTerminal())
@@ -94,15 +95,31 @@ void Game::ProcessInput()
 							bool playerMoved = TryPlayerMove(&mBoardState, col);
 							if (playerMoved && !mBoardState.IsTerminal())
 							{
-								CPUMove(&mBoardState);
+								CPUMove(&mBoardState);	// コンピュータ側の着手
 							}
 						}
+					}
+				}
+				if (mBoardState.IsTerminal())
+				{
+					int result = mBoardState.GetFourInARow();
+					if (result > 0)
+					{
+						SDL_Log("Computer Win!");
+					}
+					else if (result < 0)
+					{
+						SDL_Log("Player Win!");
+					}
+					else
+					{
+						SDL_Log("Draw");
 					}
 				}
 				break;
 		}
 	}
-	
+
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
 	if (keyState[SDL_SCANCODE_ESCAPE])
 	{
@@ -167,7 +184,7 @@ void Game::GenerateOutput()
 {
 	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
 	SDL_RenderClear(mRenderer);
-	
+
 	// Draw all sprite components
 	for (auto sprite : mSprites)
 	{

@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -17,11 +17,11 @@ public:
 	std::vector<BoardState*> GetPossibleMoves(SquareState player) const;
 	bool IsTerminal() const;
 	float GetScore() const;
+	int GetFourInARow() const;
 
 	SquareState mBoard[6][7];
 protected:
 	bool IsFull() const;
-	int GetFourInARow() const;
 	float CalculateHeuristic() const;
 };
 
@@ -30,3 +30,7 @@ bool TryPlayerMove(class BoardState* state, int column);
 
 // Make the next CPU move
 void CPUMove(class BoardState* state);
+
+float AlphaBetaMin(const BoardState* board, int depth, float alpha, float beta);
+float AlphaBetaMax(const BoardState* board, int depth, float alpha, float beta);
+int AlphaBetaDecide(const std::vector<BoardState*>& boards, int maxDepth);

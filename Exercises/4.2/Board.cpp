@@ -1,13 +1,14 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #include "Board.h"
 #include "Random.h"
+#include "SDL/SDL.h"
 
 BoardState::BoardState()
 {
@@ -24,15 +25,15 @@ std::vector<BoardState*> BoardState::GetPossibleMoves(SquareState player) const
 {
 	std::vector<BoardState*> retVal;
 
-	// For each column, find if a move is possible
+	// 各カラムについて、着手可能か調べる
 	for (int col = 0; col < 7; col++)
 	{
 		for (int row = 5; row >= 0; row--)
 		{
 			if (mBoard[row][col] == BoardState::Empty)
 			{
-				retVal.emplace_back(new BoardState(*this));
-				retVal.back()->mBoard[row][col] = player;
+				retVal.emplace_back(new BoardState(*this));	// 現在のボードをコピーして新たなボードを作成
+				retVal.back()->mBoard[row][col] = player;   // 新しいボードのrow/colをplayerとする
 				break;
 			}
 		}
@@ -208,16 +209,91 @@ bool TryPlayerMove(BoardState* state, int column)
 
 void CPUMove(BoardState* state)
 {
-	// For now, this just randomly picks one of the possible moves
+	int maxDepth = 4;
+	// 着手可能なボード（着手済み）をベクタとして得る
 	std::vector<BoardState*> moves = state->GetPossibleMoves(BoardState::Red);
-
-	int index = Random::GetIntRange(0, moves.size() - 1);
-
+	// 最適なものを選択
+	int index = AlphaBetaDecide(moves, maxDepth);
+	// 選択したボードを返す
 	*state = *moves[index];
 
-	// Clear up memory from possible moves
+	// 着手可能なボード用のメモリを開放
 	for (auto state : moves)
 	{
 		delete state;
 	}
+}
+
+int AlphaBetaDecide(const std::vector<BoardState*>& states, int maxDepth)
+{
+	// Find the subtree with the maximum value, and save the choice
+	int choice;
+	float maxValue = -std::numeric_limits<float>::infinity();
+	float beta = std::numeric_limits<float>::infinity();
+	for (int i = 0; i < states.size(); i++)
+	{
+		float v = AlphaBetaMin(states[i], maxDepth - 1, maxValue, beta);
+		if (v > maxValue)
+		{
+			maxValue = v;
+			choice = i;
+		}
+	}
+	return choice;
+}
+
+float AlphaBetaMax(const BoardState* state, int depth, float alpha, float beta)
+{
+	// If this is a leaf, return score
+	if (depth == 0 || state->IsTerminal())
+	{
+		return state->GetScore();
+	}
+
+	float maxValue = -std::numeric_limits<float>::infinity();
+	std::vector<BoardState*> moves = state->GetPossibleMoves(BoardState::Red);
+	// Find the subtree with the maximum value
+	for (auto move : moves)
+	{
+		maxValue = std::max(maxValue, AlphaBetaMin(move, depth -1, alpha, beta));
+		//SDL_Log("Max: max=%2.0f, alpha=%2.0f, beta=%2.0f", maxValue, alpha, beta);
+		if (maxValue >= beta)
+		{
+			return maxValue; // Beta prune
+		}
+		alpha = std::max(maxValue, alpha);
+	}
+	for (auto move : moves)
+	{
+		delete move;
+	}
+	return maxValue;
+}
+
+float AlphaBetaMin(const BoardState* state, int depth, float alpha, float beta)
+{
+	// If this is a leaf, return score
+	if (depth == 0 || state->IsTerminal())
+	{
+		return state->GetScore();
+	}
+
+	float minValue = std::numeric_limits<float>::infinity();
+	std::vector<BoardState*> moves = state->GetPossibleMoves(BoardState::Yellow);
+	// Find the subtree with the minimum value
+	for (auto move : moves)
+	{
+		minValue = std::min(minValue, AlphaBetaMax(move, depth - 1, alpha, beta));
+		//SDL_Log("Min: min=%2.0f, alpha=%2.0f, beta=%2.0f", minValue, alpha, beta);
+		if (minValue <= alpha)
+		{
+			return minValue; // Alpha prune
+		}
+		beta = std::min(minValue, beta);
+	}
+	for (auto move : moves)
+	{
+		delete move;
+	}
+	return minValue;
 }
