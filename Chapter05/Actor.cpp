@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -16,8 +16,8 @@ Actor::Actor(Game* game)
 	,mPosition(Vector2::Zero)
 	,mScale(1.0f)
 	,mRotation(0.0f)
-	,mGame(game)
 	,mRecomputeWorldTransform(true)
+	,mGame(game)
 {
 	mGame->AddActor(this);
 }

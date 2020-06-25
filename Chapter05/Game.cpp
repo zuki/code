@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,12 +20,12 @@
 #include "Random.h"
 
 Game::Game()
-:mWindow(nullptr)
-,mSpriteShader(nullptr)
+:mSpriteShader(nullptr)
+,mWindow(nullptr)
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -35,7 +35,7 @@ bool Game::Initialize()
 		SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	// Set OpenGL attributes
 	// Use the core OpenGL profile
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -51,7 +51,7 @@ bool Game::Initialize()
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	// Force OpenGL to use hardware acceleration
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	
+
 	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5)", 100, 100,
 							   1024, 768, SDL_WINDOW_OPENGL);
 	if (!mWindow)
@@ -59,10 +59,10 @@ bool Game::Initialize()
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
 	}
-	
+
 	// Create an OpenGL context
 	mContext = SDL_GL_CreateContext(mWindow);
-	
+
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -70,11 +70,11 @@ bool Game::Initialize()
 		SDL_Log("Failed to initialize GLEW.");
 		return false;
 	}
-	
+
 	// On some platforms, GLEW will emit a benign error code,
 	// so clear it
 	glGetError();
-	
+
 	// Make sure we can create/compile shaders
 	if (!LoadShaders())
 	{
@@ -88,7 +88,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -114,7 +114,7 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* keyState = SDL_GetKeyboardState(NULL);
 	if (keyState[SDL_SCANCODE_ESCAPE])
 	{
@@ -182,12 +182,12 @@ void Game::GenerateOutput()
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	// Clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	// Draw all sprite components
 	// Enable alpha blending on the color buffer
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
+
 	// Set shader/vao as active
 	mSpriteShader->SetActive();
 	mSpriteVerts->SetActive();

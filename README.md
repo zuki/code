@@ -121,3 +121,74 @@ convert Ship.png -strip Ship.png
 
 Chapter 4のSearch.cppからアルファ・ベータ法のコードをコピペしたら、深さ制限のコードが入ってなく、
 実行したら全く結果が帰ってこず焦った。
+
+## 第5章のソース
+
+### コンパイルにMacのCoreFoundation, OpenGLの2つのフレームワークの指定が必要だった。
+
+CoreFoundationの指定がない場合のエラー例
+
+```
+Undefined symbols for architecture x86_64:
+"_CFBundleCreate", referenced from:
+_query_DXT_capability in libSOIL.a(SOIL.o)
+...
+```
+
+OpenGLの指定指定がない場合のエラー例
+
+```
+Undefined symbols for architecture x86_64:
+"_glBindTexture", referenced from:
+      Texture::Load(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) in Texture.cpp.o
+      Texture::SetActive() in Texture.cpp.o
+      _SOIL_internal_create_OGL_texture in libSOIL.a(SOIL.o)
+      _SOIL_direct_load_DDS_from_memory in libSOIL.a(SOIL.o)
+...
+```
+
+次のようにリンク時に両フレームワークを指定した。
+
+```
+FRAMEWORKS := -framework CoreFoundation -framework OpenGL
+LDFLAGS := $(LIBDIRS) $(LIBS) $(FRAMEWORKS)
+```
+
+### libGLEWは実行時に`@executable_path/libGLEW.2.1.0.dylib`を読み込むので、その対応が必要だった。
+
+いつものように`./build/a.out`と実行したら、次のようなエラーになった。
+
+```
+$ ./build/a.out
+dyld: Library not loaded: @executable_path/libGLEW.2.1.0.dylib
+      Referenced from: /Users/dspace/develop/game/game_cpp/Chapter05/./build/a.out
+      Reason: image not found
+Abort trap: 6
+```
+
+実行時のライブラリパスは次のコマンドで見ることができる。ちなみに`SDL`は`@rpath/libSDL2-2.0.0.dylib`、
+`SDL_image`は`/usr/local/lib/libSDL2_image-2.0.0.dylib`（homewbrewで入れたもの）になっていた。
+今は深追いしないが、いずれ`External`ディレクトリにあるものとバージョンがずれると問題になるだろう。
+
+```
+otool -l ./build/a.out
+...
+Load command 14
+          cmd LC_LOAD_DYLIB
+      cmdsize 64
+         name @executable_path/libGLEW.2.1.0.dylib (offset 24)
+   time stamp 2 Thu Jan  1 09:00:02 1970
+      current version 2.1.0
+compatibility version 2.1.0
+```
+
+次のように、make後にlibGLEWのシンボリックリンクを`./build/`にはるようにした。
+
+```
+# Target
+default:
+      make all
+      ln -s $(abspath $(GLEWDIR)/lib/mac/libGLEW.2.1.0.dylib) build/.
+```
+
+以上、[macOSのコマンドラインアプリでdylibをよろしく扱う方法](https://qiita.com/omochimetaru/items/21d662b8df8bce1bc5ca)が参考になった。
