@@ -23,6 +23,9 @@ SOILDIR = ../External/SOIL
 ## Target name
 TARGET = $(BUILDDIR)/a.out
 
+## libGLEWのシンボリックリンク
+SYMLINK = $(BUILDDIR)/libGLEW.2.1.0.dylib
+
 ## Compiler options
 CC = clang
 CFLAGS = -O2 -Wall -std=c17
@@ -45,12 +48,14 @@ LDFLAGS := $(LIBDIRS) $(LIBS) $(FRAMEWORKS)
 # Target
 default:
 	make all
-	ln -s $(abspath $(GLEWDIR)/lib/mac/libGLEW.2.1.0.dylib) build/.
 
-all: $(TARGET)
+all: $(TARGET) $(SYMLINK)
 
 $(TARGET): $(OBJS)
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+$(SYMLINK): $(abspath $(GLEWDIR)/lib/mac/libGLEW.2.1.0.dylib)
+	ln -s $(abspath $(GLEWDIR)/lib/mac/libGLEW.2.1.0.dylib) build/.
 
 # assembly
 $(OBJDIR)/%.s.o: %.s

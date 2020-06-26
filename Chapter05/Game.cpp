@@ -14,7 +14,6 @@
 #include <algorithm>
 #include "Actor.h"
 #include "SpriteComponent.h"
-#include "Actor.h"
 #include "Ship.h"
 #include "Asteroid.h"
 #include "Random.h"
@@ -36,20 +35,20 @@ bool Game::Initialize()
 		return false;
 	}
 
-	// Set OpenGL attributes
-	// Use the core OpenGL profile
+	// OpenGL属性の設定
+	// OpenGLコアプロファイルの使用
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// Specify version 3.3
+	// バージョン(3.3)の指定
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	// Request a color buffer with 8-bits per RGBA channel
+	// RGBA各チャネル8ビットのカラーバッファを使用
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	// Enable double buffering
+	// ダブルバッファを有効にする
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	// Force OpenGL to use hardware acceleration
+	// アードウェアアクセレーションを使用
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 	mWindow = SDL_CreateWindow("Game Programming in C++ (Chapter 5)", 100, 100,
@@ -60,10 +59,10 @@ bool Game::Initialize()
 		return false;
 	}
 
-	// Create an OpenGL context
+	// OpenGLコンテキストの作成
 	mContext = SDL_GL_CreateContext(mWindow);
 
-	// Initialize GLEW
+	// GLEWの初期化
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
 	{
@@ -71,18 +70,18 @@ bool Game::Initialize()
 		return false;
 	}
 
-	// On some platforms, GLEW will emit a benign error code,
-	// so clear it
+	// GLEWが無害なエラーコードを発生させるプラットフォームがあるので
+	// それをクリア
 	glGetError();
 
-	// Make sure we can create/compile shaders
+	// シェーダーの作成とコンパイル
 	if (!LoadShaders())
 	{
 		SDL_Log("Failed to load shaders.");
 		return false;
 	}
 
-	// Create quad for drawing sprites
+	// スプライト描画用のクアッドを作成
 	CreateSpriteVerts();
 
 	LoadData();
@@ -178,31 +177,38 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
-	// Set the clear color to grey
+	// クリアカラーを灰色に設定
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
-	// Clear the color buffer
+	// カラーバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	// Draw all sprite components
-	// Enable alpha blending on the color buffer
+	// カラーバッファでのアルファブレンディングを有効化
+	// これを無効にすると5.6.3 図5.12, 有効にすると5.6.4 図5.13になる
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	// Set shader/vao as active
+	// スプライトのシェーダーと頂点配列オブジェクトを有効化
 	mSpriteShader->SetActive();
 	mSpriteVerts->SetActive();
+	// すべてのスプライトコンポーネントを描画
 	for (auto sprite : mSprites)
 	{
 		sprite->Draw(mSpriteShader);
 	}
 
-	// Swap the buffers
+	// バッファのスワップ
 	SDL_GL_SwapWindow(mWindow);
 }
 
 bool Game::LoadShaders()
 {
 	mSpriteShader = new Shader();
+
+	// 以下に変えると、5.3.5 図5.3となる
+	//if (!mSpriteShader->Load("Shaders/Basic.vert", "Shaders/Basic.frag"))
+	// 以下に変えると、5.5.5 図5.7となる
+	//if (!mSpriteShader->Load("Shaders/Transform.vert", "Shaders/Basic.frag"))
+	//if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	{
 		return false;
