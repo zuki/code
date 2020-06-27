@@ -182,12 +182,14 @@ void Game::UpdateGame()
 void Game::GenerateOutput()
 {
 	// クリアカラーを灰色に設定
-	//glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	// Exercise 5.1
+	/*
 	float x = Math::Sin(mBackColor.x) > 0.0f ? Math::Sin(mBackColor.x) : 0.0f;
 	float y = Math::Sin(mBackColor.y) > 0.0f ? Math::Sin(mBackColor.y) : 0.0f;
 	float z = Math::Sin(mBackColor.z) > 0.0f ? Math::Sin(mBackColor.z) : 0.0f;
 	glClearColor(x, y, z, 1.0f);
+	*/
 	// カラーバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -233,10 +235,10 @@ bool Game::LoadShaders()
 void Game::CreateSpriteVerts()
 {
 	float vertices[] = {
-		-0.5f,  0.5f, 0.f, 0.f, 0.f, // top left
-		 0.5f,  0.5f, 0.f, 1.f, 0.f, // top right
-		 0.5f, -0.5f, 0.f, 1.f, 1.f, // bottom right
-		-0.5f, -0.5f, 0.f, 0.f, 1.f  // bottom left
+		-0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, // top left
+		 0.5f,  0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, // top right
+		 0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, // bottom right
+		-0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, // bottom left
 	};
 
 	unsigned int indices[] = {

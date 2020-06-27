@@ -307,4 +307,23 @@ $ diff -uw Chapter04/Game.cpp Chapter05/Game.cpp
 
 ## 課題 5.1
 
+### 実行画面
+
 ![課題5.1](images/exercise-5.1.gif)
+
+## 課題 5.2
+
+### VertexArray
+
+```
+float vertices[] = {
+		-0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, // top left
+		 0.5f,  0.5f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f, // top right
+		 0.5f, -0.5f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, // bottom right
+		-0.5f, -0.5f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, // bottom left
+	};
+```
+
+### 実行画面
+
+![課題5.2](images/exercise-5.2.png)
