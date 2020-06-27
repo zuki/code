@@ -185,9 +185,9 @@ void Game::GenerateOutput()
 	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
 	// Exercise 5.1
 	/*
-	float x = Math::Sin(mBackColor.x) > 0.0f ? Math::Sin(mBackColor.x) : 0.0f;
-	float y = Math::Sin(mBackColor.y) > 0.0f ? Math::Sin(mBackColor.y) : 0.0f;
-	float z = Math::Sin(mBackColor.z) > 0.0f ? Math::Sin(mBackColor.z) : 0.0f;
+	float x = Math::Max(Math::Sin(mBackColor.x), 0.0f);
+	float y = Math::Max(Math::Sin(mBackColor.y), 0.0f);
+	float z = Math::Max(Math::Sin(mBackColor.z), 0.0f);
 	glClearColor(x, y, z, 1.0f);
 	*/
 	// カラーバッファをクリア
