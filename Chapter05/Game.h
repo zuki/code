@@ -68,4 +68,7 @@ private:
 	// Game-specific
 	class Ship* mShip;
 	std::vector<class Asteroid*> mAsteroids;
+
+	// Exercise 5.1
+	Vector3 mBackColor;
 };

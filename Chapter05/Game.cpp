@@ -23,6 +23,7 @@ Game::Game()
 ,mWindow(nullptr)
 ,mIsRunning(true)
 ,mUpdatingActors(false)
+,mBackColor(Vector3(-Math::Pi/2.0f, -Math::Pi, 0.0f))
 {
 
 }
@@ -173,12 +174,20 @@ void Game::UpdateGame()
 	{
 		delete actor;
 	}
+
+	// Exercise 5.1
+	mBackColor += Vector3(deltaTime, deltaTime, deltaTime);
 }
 
 void Game::GenerateOutput()
 {
 	// クリアカラーを灰色に設定
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	//glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	// Exercise 5.1
+	float x = Math::Sin(mBackColor.x) > 0.0f ? Math::Sin(mBackColor.x) : 0.0f;
+	float y = Math::Sin(mBackColor.y) > 0.0f ? Math::Sin(mBackColor.y) : 0.0f;
+	float z = Math::Sin(mBackColor.z) > 0.0f ? Math::Sin(mBackColor.z) : 0.0f;
+	glClearColor(x, y, z, 1.0f);
 	// カラーバッファをクリア
 	glClear(GL_COLOR_BUFFER_BIT);
 
