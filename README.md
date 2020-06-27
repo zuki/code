@@ -304,3 +304,7 @@ $ diff -uw Chapter04/Game.cpp Chapter05/Game.cpp
     SDL_Quit();
  }
 ```
+
+## 課題 5.1
+
+![課題5.1](images/exercise-5.1.gif)
