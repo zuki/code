@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -11,7 +11,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include "Math.h"
+#include "MathLocal.h"
 
 class Game
 {
@@ -31,7 +31,7 @@ private:
 	void GenerateOutput();
 	void LoadData();
 	void UnloadData();
-	
+
 	// All the actors in the game
 	std::vector<class Actor*> mActors;
 	// Any pending actors

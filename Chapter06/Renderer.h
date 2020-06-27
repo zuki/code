@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -11,7 +11,7 @@
 #include <vector>
 #include <unordered_map>
 #include <SDL/SDL.h>
-#include "Math.h"
+#include "MathLocal.h"
 
 struct DirectionalLight
 {
