@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,7 +20,7 @@ Game::Game()
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -44,7 +44,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -70,7 +70,7 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
@@ -137,7 +137,8 @@ void Game::GenerateOutput()
 
 void Game::LoadData()
 {
-	// Create actors
+	// アクターの作成
+	// 立方体
 	Actor* a = new Actor(this);
 	a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
 	a->SetScale(100.0f);
@@ -146,14 +147,14 @@ void Game::LoadData()
 	a->SetRotation(q);
 	MeshComponent* mc = new MeshComponent(a);
 	mc->SetMesh(mRenderer->GetMesh("Assets/Cube.gpmesh"));
-
+	// 球
 	a = new Actor(this);
 	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
 	a->SetScale(3.0f);
 	mc = new MeshComponent(a);
 	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
 
-	// Setup floor
+	// 床
 	const float start = -1250.0f;
 	const float size = 250.0f;
 	for (int i = 0; i < 10; i++)
@@ -165,21 +166,21 @@ void Game::LoadData()
 		}
 	}
 
-	// Left/right walls
+	// 左右の壁
 	q = Quaternion(Vector3::UnitX, Math::PiOver2);
 	for (int i = 0; i < 10; i++)
 	{
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
 		a->SetRotation(q);
-		
+
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
 		a->SetRotation(q);
 	}
 
 	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::PiOver2));
-	// Forward/back walls
+	// 前後の壁
 	for (int i = 0; i < 10; i++)
 	{
 		a = new PlaneActor(this);
@@ -191,12 +192,18 @@ void Game::LoadData()
 		a->SetRotation(q);
 	}
 
-	// Setup lights
+	// 光の設定
+	// 環境光（暗い灰色）
 	mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
 	DirectionalLight& dir = mRenderer->GetDirectionalLight();
+	// 平行光源の方向（下向き＋左向き）
 	dir.mDirection = Vector3(0.0f, -0.707f, -0.707f);
+	// 平行光源の拡散反射色
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+	//dir.mDiffuseColor = Vector3(0.0f, 1.0f, 0.0f);
+	// 平行光源の鏡面反射職
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+	//dir.mSpecColor = Vector3(0.5f, 1.0f, 0.5f);
 
 	// Camera actor
 	mCameraActor = new CameraActor(this);

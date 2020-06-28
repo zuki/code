@@ -151,6 +151,7 @@ bool Mesh::Load(const std::string & fileName, Renderer* renderer)
 	}
 
 	// Now create a vertex array
+	// (mNumVertsは頂点（8つ組)の数、mNumIndicesはインデックスの延べ数（3つ組の数ではない）。
 	mVertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / vertSize,
 		indices.data(), static_cast<unsigned>(indices.size()));
 	return true;

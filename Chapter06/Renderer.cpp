@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -244,7 +244,7 @@ Mesh* Renderer::GetMesh(const std::string & fileName)
 
 bool Renderer::LoadShaders()
 {
-	// Create sprite shader
+	// スプライトシェーダの作成
 	mSpriteShader = new Shader();
 	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	{
@@ -256,7 +256,7 @@ bool Renderer::LoadShaders()
 	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(mScreenWidth, mScreenHeight);
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
-	// Create basic mesh shader
+	// 基本メッシュシェーダの作成
 	mMeshShader = new Shader();
 	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
 	{
