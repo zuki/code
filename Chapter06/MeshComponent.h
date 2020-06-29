@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,6 +20,7 @@ public:
 	// Set the mesh/texture index used by mesh component
 	virtual void SetMesh(class Mesh* mesh) { mMesh = mesh; }
 	void SetTextureIndex(size_t index) { mTextureIndex = index; }
+	class Mesh* GetMesh() const { return mMesh; }
 protected:
 	class Mesh* mMesh;
 	size_t mTextureIndex;

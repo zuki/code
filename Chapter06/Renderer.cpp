@@ -19,7 +19,6 @@
 Renderer::Renderer(Game* game)
 	:mGame(game)
 	,mSpriteShader(nullptr)
-	,mMeshShader(nullptr)
 {
 }
 
@@ -90,8 +89,11 @@ void Renderer::Shutdown()
 	delete mSpriteVerts;
 	mSpriteShader->Unload();
 	delete mSpriteShader;
-	mMeshShader->Unload();
-	delete mMeshShader;
+	for (auto shader : mMeshShaders)
+	{
+		shader.second->Unload();
+		delete shader.second;
+	}
 	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
 }
@@ -126,15 +128,23 @@ void Renderer::Draw()
 	// Enable depth buffering/disable alpha blend
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	// Set the mesh shader active
-	mMeshShader->SetActive();
-	// Update view-projection matrix
-	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	// Update lighting uniforms
-	SetLightUniforms(mMeshShader);
-	for (auto mc : mMeshComps)
+	for (auto pair : mMeshShaders)
 	{
-		mc->Draw(mMeshShader);
+		auto meshShader = pair.second;
+		// Set the mesh shader active
+		meshShader->SetActive();
+		// Update view-projection matrix
+		meshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+		// Update lighting uniforms
+		SetLightUniforms(meshShader);
+		for (auto mc : mMeshComps)
+		{
+			auto mesh = mc->GetMesh();
+			if (mesh->GetShaderName() == pair.first)
+			{
+				mc->Draw(meshShader);
+			}
+		}
 	}
 
 	// Draw all sprite components
@@ -257,18 +267,27 @@ bool Renderer::LoadShaders()
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 	// 基本メッシュシェーダの作成
-	mMeshShader = new Shader();
-	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
+	class Shader* phongShader = new Shader();
+	if (!phongShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
 	{
 		return false;
 	}
+	phongShader->SetActive();
+	mMeshShaders.emplace("Phong", phongShader);
 
-	mMeshShader->SetActive();
+	class Shader* bmShader = new Shader();
+	if (!bmShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
+	{
+		return false;
+	}
+	bmShader->SetActive();
+	mMeshShaders.emplace("BasicMesh", bmShader);
+
 	// Set the view-projection matrix
 	mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
 	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
 		mScreenWidth, mScreenHeight, 25.0f, 10000.0f);
-	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+
 	return true;
 }
 

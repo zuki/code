@@ -60,6 +60,8 @@ private:
 	std::unordered_map<std::string, class Texture*> mTextures;
 	// Map of meshes loaded
 	std::unordered_map<std::string, class Mesh*> mMeshes;
+	// Map of mesh shaders
+	std::unordered_map<std::string, class Shader*> mMeshShaders;
 
 	// All the sprite components drawn
 	std::vector<class SpriteComponent*> mSprites;
@@ -76,7 +78,7 @@ private:
 	class VertexArray* mSpriteVerts;
 
 	// Mesh shader
-	class Shader* mMeshShader;
+	//class Shader* mMeshShader;
 
 	// View/projection for 3D shaders
 	Matrix4 mView;
