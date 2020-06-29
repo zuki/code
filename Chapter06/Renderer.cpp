@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include "Mesh.h"
 #include <algorithm>
+#include <sstream>
 #include "Shader.h"
 #include "VertexArray.h"
 #include "SpriteComponent.h"
@@ -19,6 +20,7 @@
 Renderer::Renderer(Game* game)
 	:mGame(game)
 	,mSpriteShader(nullptr)
+	,mPtsLightCount(0)
 {
 }
 
@@ -119,7 +121,7 @@ void Renderer::UnloadData()
 
 void Renderer::Draw()
 {
-	// Set the clear color to light grey
+	// Set the clear color to mPtsLights[0] grey
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	// Clear the color buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -135,7 +137,7 @@ void Renderer::Draw()
 		meshShader->SetActive();
 		// Update view-projection matrix
 		meshShader->SetMatrixUniform("uViewProj", mView * mProjection);
-		// Update lighting uniforms
+		// Update mPtsLights uniforms
 		SetLightUniforms(meshShader);
 		for (auto mc : mMeshComps)
 		{
@@ -314,13 +316,50 @@ void Renderer::SetLightUniforms(Shader* shader)
 	Matrix4 invView = mView;
 	invView.Invert();
 	shader->SetVectorUniform("uCameraPos", invView.GetTranslation());
-	// Ambient light
+	// Ambient mPtsLights[0]
 	shader->SetVectorUniform("uAmbientLight", mAmbientLight);
-	// Directional light
+	// Directional mPtsLights[0]
 	shader->SetVectorUniform("uDirLight.mDirection",
 		mDirLight.mDirection);
 	shader->SetVectorUniform("uDirLight.mDiffuseColor",
 		mDirLight.mDiffuseColor);
 	shader->SetVectorUniform("uDirLight.mSpecColor",
 		mDirLight.mSpecColor);
+
+	shader->SetVectorUniform("uPtsLights[0].mPosition", mPtsLights[0].mPosition);
+	shader->SetVectorUniform("uPtsLights[0].mDiffuseColor", mPtsLights[0].mDiffuseColor);
+	shader->SetVectorUniform("uPtsLights[0].mSpecColor", mPtsLights[0].mSpecColor);
+	shader->SetFloatUniform("uPtsLights[0].mSpecPower", mPtsLights[0].mSpecPower);
+	shader->SetFloatUniform("uPtsLights[0].mInfluRadius", mPtsLights[0].mInfluRadius);
+
+	shader->SetVectorUniform("uPtsLights[1].mPosition", mPtsLights[1].mPosition);
+	shader->SetVectorUniform("uPtsLights[1].mDiffuseColor", mPtsLights[1].mDiffuseColor);
+	shader->SetVectorUniform("uPtsLights[1].mSpecColor", mPtsLights[1].mSpecColor);
+	shader->SetFloatUniform("uPtsLights[1].mSpecPower", mPtsLights[1].mSpecPower);
+	shader->SetFloatUniform("uPtsLights[1].mInfluRadius", mPtsLights[1].mInfluRadius);
+
+	shader->SetVectorUniform("uPtsLights[2].mPosition", mPtsLights[2].mPosition);
+	shader->SetVectorUniform("uPtsLights[2].mDiffuseColor", mPtsLights[2].mDiffuseColor);
+	shader->SetVectorUniform("uPtsLights[2].mSpecColor", mPtsLights[2].mSpecColor);
+	shader->SetFloatUniform("uPtsLights[2].mSpecPower", mPtsLights[2].mSpecPower);
+	shader->SetFloatUniform("uPtsLights[2].mInfluRadius", mPtsLights[2].mInfluRadius);
+
+	shader->SetVectorUniform("uPtsLights[3].mPosition", mPtsLights[3].mPosition);
+	shader->SetVectorUniform("uPtsLights[3].mDiffuseColor", mPtsLights[3].mDiffuseColor);
+	shader->SetVectorUniform("uPtsLights[3].mSpecColor", mPtsLights[3].mSpecColor);
+	shader->SetFloatUniform("uPtsLights[3].mSpecPower", mPtsLights[3].mSpecPower);
+	shader->SetFloatUniform("uPtsLights[3].mInfluRadius", mPtsLights[3].mInfluRadius);
+}
+
+void Renderer::SetPointLight(PointLight light)
+{
+	if (mPtsLightCount < 4)
+	{
+		mPtsLights[mPtsLightCount].mPosition = light.mPosition;
+		mPtsLights[mPtsLightCount].mDiffuseColor = light.mDiffuseColor;
+		mPtsLights[mPtsLightCount].mSpecColor = light.mSpecColor;
+		mPtsLights[mPtsLightCount].mSpecPower = light.mSpecPower;
+		mPtsLights[mPtsLightCount].mInfluRadius = light.mInfluRadius;
+		mPtsLightCount++;
+	}
 }

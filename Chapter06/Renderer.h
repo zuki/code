@@ -9,6 +9,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <array>
 #include <unordered_map>
 #include <SDL/SDL.h>
 #include "MathLocal.h"
@@ -21,6 +22,21 @@ struct DirectionalLight
 	Vector3 mDiffuseColor;
 	// Specular color
 	Vector3 mSpecColor;
+};
+
+// 課題6.2 点光源
+struct PointLight
+{
+	// 光源の位置
+	Vector3 mPosition;
+	// 拡散反射色
+	Vector3 mDiffuseColor;
+	// 鏡面反射色
+	Vector3 mSpecColor;
+	// 鏡面反射指数
+	float mSpecPower;
+	// 影響半径
+	float mInfluRadius;
 };
 
 class Renderer
@@ -48,6 +64,8 @@ public:
 
 	void SetAmbientLight(const Vector3& ambient) { mAmbientLight = ambient; }
 	DirectionalLight& GetDirectionalLight() { return mDirLight; }
+	// 課題6.2
+	void SetPointLight(PointLight light);
 
 	float GetScreenWidth() const { return mScreenWidth; }
 	float GetScreenHeight() const { return mScreenHeight; }
@@ -90,7 +108,9 @@ private:
 	// Lighting data
 	Vector3 mAmbientLight;
 	DirectionalLight mDirLight;
-
+	// 課題6.2
+	PointLight mPtsLights[4];
+	int mPtsLightCount;
 	// Window
 	SDL_Window* mWindow;
 	// OpenGL context

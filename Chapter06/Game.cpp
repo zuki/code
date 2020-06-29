@@ -205,6 +205,36 @@ void Game::LoadData()
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 	//dir.mSpecColor = Vector3(0.5f, 1.0f, 0.5f);
 
+	// 課題6.2 点光源4つ
+	PointLight light;
+	light.mPosition = Vector3(250.0f, 100.0f, 0.0f);
+	light.mDiffuseColor = Vector3(0.0f, 1.0f, 0.0f);
+	light.mSpecColor = Vector3(0.5f, 1.0f, 0.5f);
+	light.mSpecPower = 2.0f;
+	light.mInfluRadius = 150.0f;
+	mRenderer->SetPointLight(light);
+
+	light.mPosition = Vector3(250.0f, -100.0f, 0.0f);
+	light.mDiffuseColor = Vector3(1.0f, 0.0f, 0.0f);
+	light.mSpecColor = Vector3(1.0f, 0.5f, 0.5f);
+	light.mSpecPower = 1.0f;
+	light.mInfluRadius = 200.0f;
+	mRenderer->SetPointLight(light);
+
+	light.mPosition = Vector3(150.0f, 0.0f, 50.0f);
+	light.mDiffuseColor = Vector3(0.0f, 0.0f, 1.0f);
+	light.mSpecColor = Vector3(0.5f, 0.5f, 1.0f);
+	light.mSpecPower = 1.0f;
+	light.mInfluRadius = 100.0f;
+	mRenderer->SetPointLight(light);
+
+	light.mPosition = Vector3(0.0f, 0.0f, 100.0f);
+	light.mDiffuseColor = Vector3(1.0f, 1.0f, 0.f);
+	light.mSpecColor = Vector3(1.0f, 1.0f, 0.5f);
+	light.mSpecPower = 2.0f;
+	light.mInfluRadius = 300.0f;
+	mRenderer->SetPointLight(light);
+
 	// Camera actor
 	mCameraActor = new CameraActor(this);
 

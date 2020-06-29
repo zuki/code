@@ -337,12 +337,26 @@ float vertices[] = {
 
 ### 実行画面（カメラを動かす前と動かした例）
 
-![カメラ動かす前](images/chap0601.png)　  ![カメラ動した後の例](images/chap0602.png)
+![カメラ動かす前](images/chap0601.png)
+
+![カメラ動した後の例](images/chap0602.png)
 
 ## 課題6.1
 
-### 実行画面（左上: すべてPhong, 右上: 立体がBasicMesh、左下: 球がBasicMesh、右下: 床と壁がBasicMesh）
+### 実行画面（上から、すべてPhong、立体がBasicMesh、球がBasicMesh、床と壁がBasicMesh）
 
-![すべてPhong](images/exercise-6.1-ppp.png)　　![立体がBasicMesh](images/exercise-6.1-pbp.png)
+![すべてPhong](images/exercise-6.1-ppp.png)
 
-![球がBasicMesh](images/exercise-6.1-bpp.png)　　![床と壁がBasicMesh](images/exercise-6.1-ppb.png)
+![立体がBasicMesh](images/exercise-6.1-pbp.png)
+
+![球がBasicMesh](images/exercise-6.1-bpp.png)
+
+![床と壁がBasicMesh](images/exercise-6.1-ppb.png)
+
+## 課題6.2
+
+減衰率は 1 / 4πr^2 とした。
+
+### 実行画面
+
+![課題6.2](images/exercise-6.2.png)
