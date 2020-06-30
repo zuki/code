@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -56,7 +56,7 @@ bool AudioSystem::Initialize()
 	}
 
 	// Save the low-level system pointer
-	mSystem->getLowLevelSystem(&mLowLevelSystem);
+	mSystem->getCoreSystem(&mLowLevelSystem);
 
 	// Load the master banks (strings first)
 	LoadBank("Assets/Master Bank.strings.bank");
@@ -253,7 +253,7 @@ void AudioSystem::Update(float deltaTime)
 			done.emplace_back(iter.first);
 		}
 	}
-	
+
 	// Remove done event instances from map
 	for (auto id : done)
 	{

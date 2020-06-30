@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <string>
 #include "SoundEvent.h"
-#include "Math.h"
+#include "MathLocal.h"
 
 // Forward declarations to avoid including FMOD header
 namespace FMOD

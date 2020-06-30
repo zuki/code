@@ -1,14 +1,14 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #pragma once
 #include <vector>
-#include "Math.h"
+#include "MathLocal.h"
 #include <cstdint>
 
 class Actor
@@ -43,7 +43,7 @@ public:
 	void SetScale(float scale) { mScale = scale;  mRecomputeWorldTransform = true; }
 	const Quaternion& GetRotation() const { return mRotation; }
 	void SetRotation(const Quaternion& rotation) { mRotation = rotation;  mRecomputeWorldTransform = true; }
-	
+
 	void ComputeWorldTransform();
 	const Matrix4& GetWorldTransform() const { return mWorldTransform; }
 

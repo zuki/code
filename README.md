@@ -360,3 +360,19 @@ float vertices[] = {
 ### 実行画面
 
 ![課題6.2](images/exercise-6.2.png)
+
+## 7章
+
+FMOD API 2.01を使用。変更した関数は以下の通り。
+
+```
+Studio::EventInstance::setParameterValue -> Studio::EventInstance::setParameterByName
+Studio::System::getLowLevelSystem -> Studio::System::getCoreSystem
+```
+
+さらに実行時のライブラリ指定が`@rpath/libfmodL.dylib`, `@rpath/libfmodstudioL.dylib`となっていたので、両ライブラリを`/usr/local/lib`にシンボリックリンクした。
+
+```
+$ ln -s $GAMELIB/External/FMOD/api/core/lib/libfmodL.dylib /usr/local/lib
+$ ln -s $GAMELIB/External/FMOD/api/studio/lib/libfmodstudioL.dylib /usr/local/lib
+```
