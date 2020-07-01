@@ -11,6 +11,7 @@
 #include "Actor.h"
 #include "Game.h"
 #include "AudioSystem.h"
+#include "CameraActor.h"
 
 AudioComponent::AudioComponent(Actor* owner, int updateOrder)
 	:Component(owner, updateOrder)
@@ -90,7 +91,24 @@ SoundEvent AudioComponent::PlayEvent(const std::string& name)
 		{
 			velocity = mOwner->GetForward() * (static_cast<MoveComponent*>(comp))->GetForwardSpeed();
 		}
-		e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
+		// 課題7.2
+		auto camera = mOwner->GetGame()->GetCameraActor();
+		if (mOwner->GetType() != Actor::ECamera && camera)
+		{
+			Vector3 soundPos = mOwner->GetPosition();
+			Vector3 playerToSound = soundPos - camera->GetPosition();
+			Vector3 cameraToSound = soundPos - camera->GetCameraPosition();
+			cameraToSound.Normalize();
+			Vector3 virtualPos = cameraToSound * playerToSound.Length();
+			mOwner->SetPosition(virtualPos);
+			mOwner->ComputeWorldTransform();
+			e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
+			mOwner->SetPosition(soundPos);
+		}
+		else
+		{
+			e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
+		}
 	}
 	else
 	{

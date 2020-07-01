@@ -18,6 +18,7 @@ Actor::Actor(Game* game)
 	,mScale(1.0f)
 	,mRecomputeWorldTransform(true)
 	,mGame(game)
+	,mType(EAnonym)
 {
 	mGame->AddActor(this);
 }

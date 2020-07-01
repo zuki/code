@@ -27,6 +27,8 @@ public:
 
 	class Renderer* GetRenderer() { return mRenderer; }
 	class AudioSystem* GetAudioSystem() { return mAudioSystem; }
+	// 課題7.2
+	class CameraActor* GetCameraActor() { return mCameraActor; }
 private:
 	void ProcessInput();
 	void HandleKeyPress(int key);

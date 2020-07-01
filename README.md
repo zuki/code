@@ -419,3 +419,27 @@ Type GetType() { return mType; }
 ```
 mLowLevelSystem->set3DSettings(100.0f, 50.0f, 1.0f);
 ```
+
+## 課題7.2
+
+ここでも派生クラスを区別するために`Actor`クラスに`enum Type`を設定した。そして`AudioComponent::PlayEvent()`関数に以下を追加した。ただし、これが正しいサウンドなのか聞いても判断できなかった。
+
+```
+auto camera = mOwner->GetGame()->GetCameraActor();
+if (mOwner->GetType() != Actor::ECamera && camera)
+{
+    Vector3 soundPos = mOwner->GetPosition();
+    Vector3 playerToSound = soundPos - camera->GetPosition();
+    Vector3 cameraToSound = soundPos - camera->GetCameraPosition();
+    cameraToSound.Normalize();
+    Vector3 virtualPos = cameraToSound * playerToSound.Length();
+    mOwner->SetPosition(virtualPos);
+    mOwner->ComputeWorldTransform();
+    e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
+    mOwner->SetPosition(soundPos);
+}
+else
+{
+    e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
+}
+```

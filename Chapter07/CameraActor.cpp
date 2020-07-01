@@ -5,7 +5,7 @@
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
-
+#include "Actor.h"
 #include "CameraActor.h"
 #include "MoveComponent.h"
 #include "SDL/SDL_scancode.h"
@@ -13,15 +13,19 @@
 #include "AudioSystem.h"
 #include "Game.h"
 #include "AudioComponent.h"
+#include "MeshComponent.h"
 
 CameraActor::CameraActor(Game* game)
 	:Actor(game)
 {
 	mMoveComp = new MoveComponent(this);
 	mAudioComp = new AudioComponent(this);
+	MeshComponent* mc = new MeshComponent(this);
+	mc->SetMesh(game->GetRenderer()->GetMesh("Assets/Sphere.gpmesh"));
 	mLastFootstep = 0.0f;
 	mFootstep = mAudioComp->PlayEvent("event:/Footstep");
 	mFootstep.SetPaused(true);
+	SetType(ECamera);
 }
 
 void CameraActor::UpdateActor(float deltaTime)
@@ -37,11 +41,12 @@ void CameraActor::UpdateActor(float deltaTime)
 		mLastFootstep = 0.5f;
 	}
 
-	// Compute new camera from this actor
-	Vector3 cameraPos = GetPosition();
+	// リスナーはカメラ。しかし、カメラの位置はリスナーの後ろ上。
+	// GetPosition()がリスナーの位置、mCameraPosがカメラの位置
+	mCameraPos = GetPosition() - GetForward() * 200.0f + Vector3::UnitZ * 10;
 	Vector3 target = GetPosition() + GetForward() * 100.0f;
 	Vector3 up = Vector3::UnitZ;
-	Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
+	Matrix4 view = Matrix4::CreateLookAt(mCameraPos, target, up);
 	GetGame()->GetRenderer()->SetViewMatrix(view);
 	GetGame()->GetAudioSystem()->SetListener(view, GetForward() * mMoveComp->GetForwardSpeed());
 }

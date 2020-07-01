@@ -21,6 +21,12 @@ public:
 		EPaused,
 		EDead
 	};
+	enum Type
+	{
+		ECamera,
+		EPlane,
+		EAnonym
+	};
 
 	Actor(class Game* game);
 	virtual ~Actor();
@@ -61,6 +67,9 @@ public:
 
 	// 課題7.1
 	Component* FindComponent(Component::Type type);
+	// 課題7.2
+	Type GetType() { return mType; }
+	void SetType(Type type) { mType = type; }
 private:
 	// Actor's state
 	State mState;
@@ -74,4 +83,6 @@ private:
 
 	std::vector<class Component*> mComponents;
 	class Game* mGame;
+
+	Type mType;
 };
