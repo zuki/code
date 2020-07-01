@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -43,7 +43,7 @@ void CameraActor::UpdateActor(float deltaTime)
 	Vector3 up = Vector3::UnitZ;
 	Matrix4 view = Matrix4::CreateLookAt(cameraPos, target, up);
 	GetGame()->GetRenderer()->SetViewMatrix(view);
-	GetGame()->GetAudioSystem()->SetListener(view);
+	GetGame()->GetAudioSystem()->SetListener(view, GetForward() * mMoveComp->GetForwardSpeed());
 }
 
 void CameraActor::ActorInput(const uint8_t* keys)

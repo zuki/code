@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,6 +20,7 @@ SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
 	,mTexWidth(0)
 	,mTexHeight(0)
 {
+	mType = Component::ESprite;
 	mOwner->GetGame()->GetRenderer()->AddSprite(this);
 }
 
@@ -37,12 +38,12 @@ void SpriteComponent::Draw(Shader* shader)
 			static_cast<float>(mTexWidth),
 			static_cast<float>(mTexHeight),
 			1.0f);
-		
+
 		Matrix4 world = scaleMat * mOwner->GetWorldTransform();
-		
+
 		// Since all sprites use the same shader/vertices,
 		// the game first sets them active before any sprite draws
-		
+
 		// Set world transform
 		shader->SetMatrixUniform("uWorldTransform", world);
 		// Set current texture

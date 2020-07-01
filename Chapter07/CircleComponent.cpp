@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -13,7 +13,7 @@ CircleComponent::CircleComponent(class Actor* owner)
 :Component(owner)
 ,mRadius(0.0f)
 {
-	
+	mType = Component::ECircle;
 }
 
 const Vector3& CircleComponent::GetCenter() const

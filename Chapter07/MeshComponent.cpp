@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -20,6 +20,7 @@ MeshComponent::MeshComponent(Actor* owner)
 	,mMesh(nullptr)
 	,mTextureIndex(0)
 {
+	mType = Component::EMesh;
 	mOwner->GetGame()->GetRenderer()->AddMeshComp(this);
 }
 
@@ -33,7 +34,7 @@ void MeshComponent::Draw(Shader* shader)
 	if (mMesh)
 	{
 		// Set the world transform
-		shader->SetMatrixUniform("uWorldTransform", 
+		shader->SetMatrixUniform("uWorldTransform",
 			mOwner->GetWorldTransform());
 		// Set specular power
 		shader->SetFloatUniform("uSpecPower", mMesh->GetSpecPower());

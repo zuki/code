@@ -352,3 +352,70 @@ Studio::System::getLowLevelSystem -> Studio::System::getCoreSystem
 $ ln -s $GAMELIB/External/FMOD/api/core/lib/libfmodL.dylib /usr/local/lib
 $ ln -s $GAMELIB/External/FMOD/api/studio/lib/libfmodstudioL.dylib /usr/local/lib
 ```
+
+## 課題7.1
+
+次の関数の引数に`velocity`を追加し、ドップラー効果を有効にするために`velocity`を設定する。
+
+`AudioSystem::SetListener()`
+
+```
+-   void SetListener(const Matrix4& viewMatrix);
++   void SetListener(const Matrix4& viewMatrix, Vector3 velocity);
+
+-   listener.velocity = {0.0f, 0.0f, 0.0f};
++   listener.velocity = VecToFMOD(velocity);
+```
+
+`SoundEvent::Set3DAttributes()`
+```
+-   void Set3DAttributes(const Matrix4& worldTrans);
++   void Set3DAttributes(const Matrix4& worldTrans, Vector3 velocity);
+
+-   attr.velocity = { 0.0f, 0.0f, 0.0f };
++   attr.velocity = VecToFMOD(velocity);
+
+```
+
+そして、これらの関数を呼び出す際の速度を次のように設定する。
+
+`CameraActor::UpdateActor()`
+```
+-   GetGame()->GetAudioSystem()->SetListener(view);
++   GetGame()->GetAudioSystem()->SetListener(view, GetForward() * mMoveComp->GetForwardSpeed());
+```
+
+`AudioComponent::OnUpdateWorldTransform()`, `AudioComponent::PlayEvent()`
+```
+-           event.Set3DAttributes(world);
++           Vector3 velocity = Vector3::Zero;
++           auto comp = mOwner->FindComponent(Component::EMove);
++           if (comp)
++           {
++               velocity = mOwner->GetForward() * (static_cast<MoveComponent*>(c
+omp))->GetForwardSpeed();
++           }
++           event.Set3DAttributes(world, velocity);
+```
+
+この際、`AudioComponent`内からオーナーの持つ`MoveCompoent`にアクセスするために`Component`クラスに`enum Type`を新設してメンバとして持と、このタイプからコンポーネントを取得可能にした。
+
+`Component.h`
+```
+enum Type
+{
+    EAudio,
+    ECircle,
+    EMesh,
+    EMove,
+    ESprite
+};
+void SetType(Type type) { mType = type; }
+Type GetType() { return mType; }
+```
+
+最後に、ドップラー効果を誇張するために`AudioSystem::Initialize()`でコアシステムを取得した後に次の設定を行う。
+
+```
+mLowLevelSystem->set3DSettings(100.0f, 50.0f, 1.0f);
+```

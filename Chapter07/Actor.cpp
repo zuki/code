@@ -122,3 +122,15 @@ void Actor::RemoveComponent(Component* component)
 		mComponents.erase(iter);
 	}
 }
+
+Component* Actor::FindComponent(Component::Type type)
+{
+	for (auto comp : mComponents)
+	{
+		if (comp->GetType() == type)
+		{
+			return comp;
+		}
+	}
+	return nullptr;
+}

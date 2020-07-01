@@ -1,12 +1,13 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #include "AudioComponent.h"
+#include "MoveComponent.h"
 #include "Actor.h"
 #include "Game.h"
 #include "AudioSystem.h"
@@ -14,6 +15,7 @@
 AudioComponent::AudioComponent(Actor* owner, int updateOrder)
 	:Component(owner, updateOrder)
 {
+	mType = Component::EAudio;
 }
 
 AudioComponent::~AudioComponent()
@@ -62,7 +64,14 @@ void AudioComponent::OnUpdateWorldTransform()
 	{
 		if (event.IsValid())
 		{
-			event.Set3DAttributes(world);
+			// 課題7.1
+			Vector3 velocity = Vector3::Zero;
+			auto comp = mOwner->FindComponent(Component::EMove);
+			if (comp)
+			{
+				velocity = mOwner->GetForward() * (static_cast<MoveComponent*>(comp))->GetForwardSpeed();
+			}
+			event.Set3DAttributes(world, velocity);
 		}
 	}
 }
@@ -74,8 +83,14 @@ SoundEvent AudioComponent::PlayEvent(const std::string& name)
 	if (e.Is3D())
 	{
 		mEvents3D.emplace_back(e);
-		// Set initial 3D attributes
-		e.Set3DAttributes(mOwner->GetWorldTransform());
+		// 課題7.1
+		Vector3 velocity = Vector3::Zero;
+		auto comp = mOwner->FindComponent(Component::EMove);
+		if (comp)
+		{
+			velocity = mOwner->GetForward() * (static_cast<MoveComponent*>(comp))->GetForwardSpeed();
+		}
+		e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
 	}
 	else
 	{

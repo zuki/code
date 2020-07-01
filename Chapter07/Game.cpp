@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -13,6 +13,7 @@
 #include "Actor.h"
 #include "SpriteComponent.h"
 #include "MeshComponent.h"
+#include "MoveComponent.h"
 #include "CameraActor.h"
 #include "PlaneActor.h"
 #include "AudioComponent.h"
@@ -23,7 +24,7 @@ Game::Game()
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -58,7 +59,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -93,7 +94,7 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
@@ -250,7 +251,7 @@ void Game::LoadData()
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
 		a->SetRotation(q);
-		
+
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
 		a->SetRotation(q);
@@ -299,7 +300,7 @@ void Game::LoadData()
 	mc->SetMesh(mRenderer->GetMesh("Assets/Sphere.gpmesh"));
 	AudioComponent* ac = new AudioComponent(a);
 	ac->PlayEvent("event:/FireLoop");
-
+	MoveComponent* mvc = new MoveComponent(a);
 	// Start music
 	mMusicEvent = mAudioSystem->PlayEvent("event:/Music");
 }

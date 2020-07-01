@@ -9,6 +9,7 @@
 #pragma once
 #include <vector>
 #include "MathLocal.h"
+#include "Component.h"
 #include <cstdint>
 
 class Actor
@@ -54,10 +55,12 @@ public:
 
 	class Game* GetGame() { return mGame; }
 
-
 	// Add/remove components
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
+
+	// 課題7.1
+	Component* FindComponent(Component::Type type);
 private:
 	// Actor's state
 	State mState;
