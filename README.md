@@ -443,3 +443,7 @@ else
     e.Set3DAttributes(mOwner->GetWorldTransform(), velocity);
 }
 ```
+
+## 8章
+
+ゲームコントローラを持っていないため、この章は当面保留。
