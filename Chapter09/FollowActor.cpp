@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -15,6 +15,7 @@
 
 FollowActor::FollowActor(Game* game)
 	:Actor(game)
+	,mRightButton(false)
 {
 	mMeshComp = new MeshComponent(this);
 	mMeshComp->SetMesh(game->GetRenderer()->GetMesh("Assets/RacingCar.gpmesh"));
@@ -58,6 +59,40 @@ void FollowActor::ActorInput(const uint8_t* keys)
 	else
 	{
 		mCameraComp->SetHorzDist(350.0f);
+	}
+
+	// 課題9.1
+	// マウスの動きでピッチとヨーを設定
+	int x, y;
+	Uint32 buttons = SDL_GetRelativeMouseState(&x, &y);
+	// 右ボタンを押している間だけピッチとヨーを追加
+	if (buttons & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	{
+		const int maxMouseSpeed = 500;
+		const float maxOrbitSpeed = Math::Pi * 8;
+		float yawSpeed = 0.0f;
+		if (x != 0)
+		{
+			yawSpeed = static_cast<float>(x) / maxMouseSpeed;
+			yawSpeed *= maxOrbitSpeed;
+		}
+		mCameraComp->SetYawSpeed(-yawSpeed);
+
+		float pitchSpeed = 0.0f;
+		if (y != 0)
+		{
+			pitchSpeed = static_cast<float>(y) / maxMouseSpeed;
+			pitchSpeed *= maxOrbitSpeed;
+		}
+		mCameraComp->SetPitchSpeed(pitchSpeed);
+
+		mRightButton = true;
+	}
+	else if (mRightButton)
+	{
+		mCameraComp->SetYawSpeed(0.0f);
+		mCameraComp->SetPitchSpeed(0.0f);
+		mRightButton = false;
 	}
 }
 

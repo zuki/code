@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -15,6 +15,9 @@ FollowCamera::FollowCamera(Actor* owner)
 	,mVertDist(150.0f)
 	,mTargetDist(100.0f)
 	,mSpringConstant(64.0f)
+	,mUp(Vector3::UnitZ)
+	,mPitchSpeed(0.0f)
+	,mYawSpeed(0.0f)
 {
 }
 
@@ -25,6 +28,24 @@ void FollowCamera::Update(float deltaTime)
 	float dampening = 2.0f * Math::Sqrt(mSpringConstant);
 	// Compute ideal position
 	Vector3 idealPos = ComputeCameraPos();
+	// 課題9.1
+	if (mYawSpeed != 0.0f || mPitchSpeed != 0.0f)
+	{
+		Quaternion yaw(Vector3::UnitZ, mYawSpeed * deltaTime);
+		idealPos = Vector3::Transform(idealPos, yaw);
+		mUp = Vector3::Transform(mUp, yaw);
+		Vector3 forward = mOwner->GetForward();
+		forward.Normalize();
+		Vector3 right = Vector3::Cross(mUp, forward);
+		right.Normalize();
+		Quaternion pitch(right, mPitchSpeed * deltaTime);
+		idealPos = Vector3::Transform(idealPos, pitch);
+		mUp = Vector3::Transform(mUp, pitch);
+	}
+	else
+	{
+		mUp = Vector3::UnitZ;
+	}
 	// Compute difference between actual and ideal
 	Vector3 diff = mActualPos - idealPos;
 	// Compute acceleration of spring
@@ -39,7 +60,7 @@ void FollowCamera::Update(float deltaTime)
 		mOwner->GetForward() * mTargetDist;
 	// Use actual position here, not ideal
 	Matrix4 view = Matrix4::CreateLookAt(mActualPos, target,
-		Vector3::UnitZ);
+		mUp);
 	SetViewMatrix(view);
 }
 
