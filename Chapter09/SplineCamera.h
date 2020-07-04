@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -45,4 +45,7 @@ private:
 	float mSpeed;
 	// Whether to move the camera long the path
 	bool mPaused;
+	// 課題9.2
+	// 逆戻り中か
+	bool mReversing;
 };

@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -43,6 +43,7 @@ SplineCamera::SplineCamera(Actor* owner)
 	,mT(0.0f)
 	,mSpeed(0.5f)
 	,mPaused(true)
+	,mReversing(false)
 {
 }
 
@@ -58,16 +59,31 @@ void SplineCamera::Update(float deltaTime)
 		// multiple control points in one frame.
 		if (mT >= 1.0f)
 		{
-			// Make sure we have enough points to advance the path
-			if (mIndex < mPath.GetNumPoints() - 3)
+			if (!mReversing)
 			{
-				mIndex++;
-				mT = mT - 1.0f;
+				// Make sure we have enough points to advance the path
+				if (mIndex < mPath.GetNumPoints() - 3)
+				{
+					mIndex++;
+					mT = mT - 1.0f;
+				}
+				else
+				{
+					// Path's done, so pause
+					mReversing = true;
+				}
 			}
 			else
 			{
-				// Path's done, so pause
-				mPaused = true;
+				if (mIndex > 1)
+				{
+					mIndex--;
+					mT = mT - 1.0f;
+				}
+				else
+				{
+					mReversing = false;
+				}
 			}
 		}
 	}
