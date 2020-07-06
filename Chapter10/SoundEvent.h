@@ -8,7 +8,7 @@
 
 #pragma once
 #include <string>
-#include "Math.h"
+#include "MathLocal.h"
 
 class SoundEvent
 {
