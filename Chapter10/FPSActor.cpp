@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -18,9 +18,12 @@
 #include "BallActor.h"
 #include "BoxComponent.h"
 #include "PlaneActor.h"
+#include "SDL/SDL_log.h"
 
 FPSActor::FPSActor(Game* game)
 	:Actor(game)
+	,mMode(EGround)
+	,mZSpeed(0.0f)
 {
 	mMoveComp = new MoveComponent(this);
 	mAudioComp = new AudioComponent(this);
@@ -47,6 +50,19 @@ void FPSActor::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
 
+	if (mMode != EGround)
+	{
+		mZSpeed -= 9.8f * deltaTime;
+		if (mMode == EJump && mZSpeed <= 0.0f)
+		{
+			mMode = EFall;
+			//SDL_Log("EJump -> EFall");
+		}
+		Vector3 pos = GetPosition() + (Vector3::UnitZ * mZSpeed);
+		//SDL_Log("mZSpeed = %10.4f, pos.z = %10.4f", mZSpeed, pos.z);
+		SetPosition(pos);
+	}
+
 	FixCollisions();
 
 	// Play the footstep if we're moving and haven't recently
@@ -59,7 +75,7 @@ void FPSActor::UpdateActor(float deltaTime)
 		mFootstep.Restart();
 		mLastFootstep = 0.5f;
 	}
-	
+
 	// Update position of FPS model relative to actor position
 	const Vector3 modelOffset(Vector3(10.0f, 10.0f, -10.0f));
 	Vector3 modelPos = GetPosition();
@@ -94,6 +110,12 @@ void FPSActor::ActorInput(const uint8_t* keys)
 	if (keys[SDL_SCANCODE_D])
 	{
 		strafeSpeed += 400.0f;
+	}
+	if (mMode == EGround && keys[SDL_SCANCODE_SPACE])
+	{
+		mZSpeed = 9.8f;
+		mMode = EJump;
+		//SDL_Log("EGrouud -> EJump");
 	}
 
 	mMoveComp->SetForwardSpeed(forwardSpeed);
@@ -185,6 +207,12 @@ void FPSActor::FixCollisions()
 			float dy2 = planeBox.mMin.y - playerBox.mMax.y;
 			float dz1 = planeBox.mMax.z - playerBox.mMin.z;
 			float dz2 = planeBox.mMin.z - playerBox.mMax.z;
+			if (mMode == EFall && dz2 <= (playerBox.mMax.z - playerBox.mMin.z))
+			{
+				mMode = EGround;
+				mZSpeed = 0.0f;
+				//SDL_Log("EFall -> EGroud");
+			}
 
 			// Set dx to whichever of dx1/dx2 have a lower abs
 			float dx = Math::Abs(dx1) < Math::Abs(dx2) ?
@@ -195,7 +223,7 @@ void FPSActor::FixCollisions()
 			// Ditto for dz
 			float dz = Math::Abs(dz1) < Math::Abs(dz2) ?
 				dz1 : dz2;
-			
+
 			// Whichever is closest, adjust x/y position
 			if (Math::Abs(dx) <= Math::Abs(dy) && Math::Abs(dx) <= Math::Abs(dz))
 			{

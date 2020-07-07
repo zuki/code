@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -13,6 +13,11 @@
 class FPSActor : public Actor
 {
 public:
+	enum Mode {
+		EGround,
+		EJump,
+		EFall
+	};
 	FPSActor(class Game* game);
 
 	void UpdateActor(float deltaTime) override;
@@ -34,4 +39,7 @@ private:
 	class Actor* mFPSModel;
 	SoundEvent mFootstep;
 	float mLastFootstep;
+	//課題10.1
+	Mode mMode;
+	float mZSpeed;
 };
