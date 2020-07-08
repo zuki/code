@@ -18,6 +18,7 @@
 #include "BallActor.h"
 #include "BoxComponent.h"
 #include "PlaneActor.h"
+#include "PhysWorld.h"
 #include "SDL/SDL_log.h"
 
 FPSActor::FPSActor(Game* game)
@@ -38,7 +39,7 @@ FPSActor::FPSActor(Game* game)
 	mMeshComp = new MeshComponent(mFPSModel);
 	mMeshComp->SetMesh(game->GetRenderer()->GetMesh("Assets/Rifle.gpmesh"));
 
-	// Add a box component
+	// プレーヤーのAABB(50x50x175)
 	mBoxComp = new BoxComponent(this);
 	AABB myBox(Vector3(-25.0f, -25.0f, -87.5f),
 		Vector3(25.0f, 25.0f, 87.5f));
@@ -61,6 +62,17 @@ void FPSActor::UpdateActor(float deltaTime)
 		Vector3 pos = GetPosition() + (Vector3::UnitZ * mZSpeed);
 		//SDL_Log("mZSpeed = %10.4f, pos.z = %10.4f", mZSpeed, pos.z);
 		SetPosition(pos);
+	}
+	else
+	{
+		Vector3 start = this->GetPosition();
+		Vector3 end = start + (Vector3::UnitZ * 10.0f);
+		LineSegment lineSeg(start, end);
+		PhysWorld::CollisionInfo cinfo;
+		if (!GetGame()->GetPhysWorld()->SegmentCast(lineSeg, cinfo)) {
+			mMode = EFall;
+			//SDL_Log("EGround -> EFall");
+		}
 	}
 
 	FixCollisions();
@@ -211,9 +223,8 @@ void FPSActor::FixCollisions()
 			{
 				mMode = EGround;
 				mZSpeed = 0.0f;
-				//SDL_Log("EFall -> EGroud");
+				//SDL_Log("EFall -> EGround");
 			}
-
 			// Set dx to whichever of dx1/dx2 have a lower abs
 			float dx = Math::Abs(dx1) < Math::Abs(dx2) ?
 				dx1 : dx2;

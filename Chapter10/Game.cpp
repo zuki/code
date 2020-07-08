@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -26,7 +26,7 @@ Game::Game()
 ,mIsRunning(true)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -64,7 +64,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -113,7 +113,7 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
@@ -214,12 +214,12 @@ void Game::GenerateOutput()
 
 void Game::LoadData()
 {
-	// Create actors
+	// 作業用アクターの作成
 	Actor* a = nullptr;
 	Quaternion q;
 	//MeshComponent* mc = nullptr;
 
-	// Setup floor
+	// 床を設置（250^2のplaneを10x10枚。z=-100）
 	const float start = -1250.0f;
 	const float size = 250.0f;
 	for (int i = 0; i < 10; i++)
@@ -231,21 +231,21 @@ void Game::LoadData()
 		}
 	}
 
-	// Left/right walls
+	// 左右の壁を設置（250^2を10枚）
 	q = Quaternion(Vector3::UnitX, Math::PiOver2);
 	for (int i = 0; i < 10; i++)
 	{
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
 		a->SetRotation(q);
-		
+
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
 		a->SetRotation(q);
 	}
 
 	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::PiOver2));
-	// Forward/back walls
+	// 前後の壁を設置（250^2を10枚）
 	for (int i = 0; i < 10; i++)
 	{
 		a = new PlaneActor(this);
@@ -289,10 +289,7 @@ void Game::LoadData()
 	// Make an initial call to get relative to clear out
 	SDL_GetRelativeMouseState(nullptr, nullptr);
 
-	// Different camera actors
-	mFPSActor = new FPSActor(this);
-
-	// Create target actors
+	// 的
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
 	a = new TargetActor(this);
@@ -301,6 +298,21 @@ void Game::LoadData()
 	a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
+
+	//課題10.1
+	// 台を設置（床の中央に250^2のplaneを2x2枚。z=200）
+	for (int i = 4; i <=5; i++)
+	{
+		for (int j = 4; j <=5; j++)
+		{
+			a = new PlaneActor(this);
+			a->SetPosition(Vector3(start + i * size, start + j * size, 200.0f));
+		}
+	}
+	// プレーヤー(位置はVector3(0, 0, 375))
+	mFPSActor = new FPSActor(this);
+	mFPSActor->SetPosition(Vector3(0.0f, 0.0f, 275.0f));
+
 }
 
 void Game::UnloadData()
