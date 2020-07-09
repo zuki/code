@@ -122,7 +122,12 @@ void PhysWorld::SweepAndPrune(std::vector<class BoxComponent*>& boxes, const cha
 			else
 				min = b->GetWorldBox().mMin.z;
 			//SDL_Log("min: %5.1f, max: %5.1f", min, max);
-			if (min <= max)
+			// このifは比較回数を減らすために必須
+			if (min > max)
+			{
+				break;
+			}
+			else
 			{
 			/*
 				SDL_Log("SP: %s and %s",
