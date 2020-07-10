@@ -469,3 +469,52 @@ else
 ## 課題10.2
 
 課題用に最小限のファイルのみで構成した。3軸の重なりのみでボックスの重なりをチェックする。
+
+## 課題10.3
+
+中心位置: Vector3 c(x, y, z), 回転: Quaternion　q, 広がり: Vector3 e(a, b, c) (広がりは中心からの距離の半分）とする。
+
+1. 中心ベクトルを回転する。
+
+    ```cpp
+    c = Vector3::Transform(c, q);
+    ```
+
+2. 広がりを適用（c = c ± e）して、8個の頂点を次のように求める。
+
+    ```cpp
+    p[0](x-a, y-b, z-c), p[1](x+a, y-b, z-c), p[2](x-a, y+b, z-c), r(x+a, y+b, z-c)
+    O(x-a, y-b, z+c), P(x+a, y-b, z+c), Q(x-a, y+b, z+c), R(x+a, y+b, z+c)
+    ```
+
+3. 3軸は、面opOP(p[0145])、面oqOQ(p[0246])、面opqr(p[0123])の法線ベクトルであり、次のように求める。
+
+    ```cpp
+    axis_x = Vector3::Cross(p[4] - p[0], p[1] - p[0]).Normalize();
+    axis_y = Vector3::Cross(p[2] - p[0], p[4] - p[0]).Normalize();
+    axis_z = Vector3::Cross(p[1] - p[0], p[2] - p[0]).Normalize();
+    ```
+
+4. 法線ベクトル以外の9つの軸は2つのOBBの3軸について、次のように求める。
+
+    ```cpp
+    axis_x_x = Vector3::Cross(a_axis_x, b_axis_x);
+    axis_x_y = Vector3::Cross(a_axis_x, b_axis_y);
+    axis_x_z = Vector3::Cross(a_axis_x, b_axis_z);
+    a_axis_y, a_axis_zについても同様
+    ```
+
+5. 各軸について2つのOBBの8つの頂点で以下の計算をして最小値と最大値を求めて、重なりをチェックする。
+
+    ```cpp
+    float min = Math::Infinity;
+    float max = Math::NegInfinity;
+    for (int i=0; i<8; i++)
+    {
+        float dot = Vector3::Dot(a[i], axis);
+        if (dot < min) min = dot;
+        if (dot > max) max = dot;
+    }
+
+    if (max1 < min2 || max2 < min1) 分離
+    ```
