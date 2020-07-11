@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -158,12 +158,12 @@ void InputSystem::Update()
 	int x = 0, y = 0;
 	if (mState.Mouse.mIsRelative)
 	{
-		mState.Mouse.mCurrButtons = 
+		mState.Mouse.mCurrButtons =
 			SDL_GetRelativeMouseState(&x, &y);
 	}
 	else
 	{
-		mState.Mouse.mCurrButtons = 
+		mState.Mouse.mCurrButtons =
 			SDL_GetMouseState(&x, &y);
 	}
 
@@ -175,7 +175,7 @@ void InputSystem::Update()
 	for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
 	{
 		mState.Controller.mCurrButtons[i] =
-			SDL_GameControllerGetButton(mController, 
+			SDL_GameControllerGetButton(mController,
 				SDL_GameControllerButton(i));
 	}
 

@@ -10,7 +10,7 @@
 #include <SDL/SDL_scancode.h>
 #include <SDL/SDL_gamecontroller.h>
 #include <SDL/SDL_mouse.h>
-#include "Math.h"
+#include "MathLocal.h"
 
 // The different button states
 enum ButtonState

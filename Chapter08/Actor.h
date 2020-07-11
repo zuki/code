@@ -8,7 +8,7 @@
 
 #pragma once
 #include <vector>
-#include "Math.h"
+#include "MathLocal.h"
 #include <cstdint>
 
 class Actor

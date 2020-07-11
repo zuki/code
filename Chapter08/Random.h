@@ -8,7 +8,7 @@
 
 #pragma  once
 #include <random>
-#include "Math.h"
+#include "MathLocal.h"
 
 class Random
 {
