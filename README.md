@@ -450,6 +450,15 @@ else
 
 ハードオフでPS3 Controllerを550円で買ってきた。`SDL_GameControllerDB`は不要でそのまま使えた。
 
+## 課題8.1
+
+ゲームコントローラ接続イベントの`event.cdevice.which`で通知される値が`SDL_CONTROLLERDEVICEADDED`では
+ジョイスティックデバイス番号で、`SDL_CONTROLLERDEVICEREMOVED`はインスタンスID。SDL2.0.4以降では
+`SDL_GameControllerFromInstanceID()`関数があり、インスタンスIDから`SDL_GameController*`が得られるが
+2.0.0ではこの関数がないので、自前でジョイスティックデバイス番号を持つ必要があった。
+
+ゲームコントローラが1つしかないので、複数の同時使用はテストできないが、ホットスワップは動いているようである。
+
 ## 課題9.1
 
 右ボタンを話したときに`mYawSpeed`と`mPitchSpeed`を`0`に、`mUp`を`Vecotor3::UnitZ`に戻したが、

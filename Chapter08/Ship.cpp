@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -38,24 +38,28 @@ void Ship::UpdateActor(float deltaTime)
 
 void Ship::ActorInput(const InputState& state)
 {
-	if (state.Controller.GetRightTrigger() > 0.25f
-		&& mLaserCooldown <= 0.0f)
+	for (int i=0; i<NUM_CONTROLLERS; i++)
 	{
-		// Create a laser and set its position/rotation to mine
-		Laser* laser = new Laser(GetGame());
-		laser->SetPosition(GetPosition());
-		laser->SetRotation(GetRotation());
-
-		// Reset laser cooldown (quarter second)
-		mLaserCooldown = 0.25f;
-	}
-
-	if (state.Controller.GetIsConnected())
-	{
-		mVelocityDir = state.Controller.GetLeftStick();
-		if (!Math::NearZero(state.Controller.GetRightStick().Length()))
+		if (state.Controller[i].GetRightTrigger() > 0.25f
+			&& mLaserCooldown <= 0.0f)
 		{
-			mRotationDir = state.Controller.GetRightStick();
+			// Create a laser and set its position/rotation to mine
+			Laser* laser = new Laser(GetGame());
+			laser->SetPosition(GetPosition());
+			laser->SetRotation(GetRotation());
+
+			// Reset laser cooldown (quarter second)
+			mLaserCooldown = 0.25f;
+		}
+
+		if (state.Controller[i].GetIsConnected())
+		{
+			mVelocityDir = state.Controller[i].GetLeftStick();
+			if (!Math::NearZero(state.Controller[i].GetRightStick().Length()))
+			{
+				mRotationDir = state.Controller[i].GetRightStick();
+			}
 		}
 	}
+
 }

@@ -118,13 +118,11 @@ bool InputSystem::Initialize()
 	mState.Mouse.mPrevButtons = 0;
 
 	// Get the connected controller, if it exists
-	mController = SDL_GameControllerOpen(0);
-	// Initialize controller state
-	mState.Controller.mIsConnected = (mController != nullptr);
-	memset(mState.Controller.mCurrButtons, 0,
-		SDL_CONTROLLER_BUTTON_MAX);
-	memset(mState.Controller.mPrevButtons, 0,
-		SDL_CONTROLLER_BUTTON_MAX);
+	// 課題8.1
+	for (int i=0; i<NUM_CONTROLLERS; i++)
+	{
+		AddGameController(i);
+	}
 
 	return true;
 }
@@ -147,9 +145,15 @@ void InputSystem::PrepareForUpdate()
 	mState.Mouse.mScrollWheel = Vector2::Zero;
 
 	// Controller
-	memcpy(mState.Controller.mPrevButtons,
-		mState.Controller.mCurrButtons,
-		SDL_CONTROLLER_BUTTON_MAX);
+	for (int i=0; i<NUM_CONTROLLERS; i++)
+	{
+		if (mState.Controller[i].mIsConnected)
+		{
+			memcpy(mState.Controller[i].mPrevButtons,
+				mState.Controller[i].mCurrButtons,
+				SDL_CONTROLLER_BUTTON_MAX);
+		}
+	}
 }
 
 void InputSystem::Update()
@@ -171,44 +175,64 @@ void InputSystem::Update()
 	mState.Mouse.mMousePos.y = static_cast<float>(y);
 
 	// Controller
-	// Buttons
-	for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
+	// 課題8.1
+	for (int j=0; j<4; j++)
 	{
-		mState.Controller.mCurrButtons[i] =
-			SDL_GameControllerGetButton(mController,
+		if (!mState.Controller[j].mIsConnected)
+		{
+			continue;
+		}
+		// Buttons
+		for (int i = 0; i < SDL_CONTROLLER_BUTTON_MAX; i++)
+		{
+			mState.Controller[j].mCurrButtons[i] =
+				SDL_GameControllerGetButton(mController[j],
 				SDL_GameControllerButton(i));
+		}
+
+		// Triggers
+		mState.Controller[j].mLeftTrigger =
+			Filter1D(SDL_GameControllerGetAxis(mController[j],
+				SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+		mState.Controller[j].mRightTrigger =
+			Filter1D(SDL_GameControllerGetAxis(mController[j],
+				SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+
+		// Sticks
+		x = SDL_GameControllerGetAxis(mController[j],
+			SDL_CONTROLLER_AXIS_LEFTX);
+		y = -SDL_GameControllerGetAxis(mController[j],
+			SDL_CONTROLLER_AXIS_LEFTY);
+		mState.Controller[j].mLeftStick = Filter2D(x, y);
+
+		x = SDL_GameControllerGetAxis(mController[j],
+			SDL_CONTROLLER_AXIS_RIGHTX);
+		y = -SDL_GameControllerGetAxis(mController[j],
+			SDL_CONTROLLER_AXIS_RIGHTY);
+		mState.Controller[j].mRightStick = Filter2D(x, y);
 	}
 
-	// Triggers
-	mState.Controller.mLeftTrigger =
-		Filter1D(SDL_GameControllerGetAxis(mController,
-			SDL_CONTROLLER_AXIS_TRIGGERLEFT));
-	mState.Controller.mRightTrigger =
-		Filter1D(SDL_GameControllerGetAxis(mController,
-			SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
-
-	// Sticks
-	x = SDL_GameControllerGetAxis(mController,
-		SDL_CONTROLLER_AXIS_LEFTX);
-	y = -SDL_GameControllerGetAxis(mController,
-		SDL_CONTROLLER_AXIS_LEFTY);
-	mState.Controller.mLeftStick = Filter2D(x, y);
-
-	x = SDL_GameControllerGetAxis(mController,
-		SDL_CONTROLLER_AXIS_RIGHTX);
-	y = -SDL_GameControllerGetAxis(mController,
-		SDL_CONTROLLER_AXIS_RIGHTY);
-	mState.Controller.mRightStick = Filter2D(x, y);
 }
 
 void InputSystem::ProcessEvent(SDL_Event& event)
 {
+	int idx;
+	SDL_JoystickID joyID;
+
 	switch (event.type)
 	{
 	case SDL_MOUSEWHEEL:
 		mState.Mouse.mScrollWheel = Vector2(
 			static_cast<float>(event.wheel.x),
 			static_cast<float>(event.wheel.y));
+		break;
+	case SDL_CONTROLLERDEVICEADDED:
+		idx = static_cast<int>(event.cdevice.which);
+		AddGameController(idx);
+		break;
+	case SDL_CONTROLLERDEVICEREMOVED:
+		joyID = static_cast<SDL_JoystickID>(event.cdevice.which);
+		RemoveGameController(joyID);
 		break;
 	default:
 		break;
@@ -279,4 +303,41 @@ Vector2 InputSystem::Filter2D(int inputX, int inputY)
 	}
 
 	return dir;
+}
+
+// 課題 8.1
+void InputSystem::AddGameController(int idx)
+{
+	if (SDL_IsGameController(idx))
+	{
+		mController[idx] = SDL_GameControllerOpen(idx);
+		mState.Controller[idx].mIsConnected = (mController[idx] != nullptr);
+		memset(mState.Controller[idx].mCurrButtons, 0,
+			SDL_CONTROLLER_BUTTON_MAX);
+		memset(mState.Controller[idx].mPrevButtons, 0,
+			SDL_CONTROLLER_BUTTON_MAX);
+		SDL_Joystick *joy = SDL_GameControllerGetJoystick(mController[idx]);
+		mState.Controller[idx].mJoystickID = SDL_JoystickInstanceID(joy);
+	}
+	else
+	{
+		mController[idx] = nullptr;
+		mState.Controller[idx].mIsConnected = false;
+		mState.Controller[idx].mJoystickID = -1;
+	}
+}
+
+void InputSystem::RemoveGameController(SDL_JoystickID id)
+{
+	for(int i=0; i<NUM_CONTROLLERS; i++)
+	{
+		if (mState.Controller[i].mJoystickID == id)
+		{
+			SDL_GameControllerClose(mController[i]);
+			mController[i] = nullptr;
+			mState.Controller[i].mIsConnected = false;
+			mState.Controller[i].mJoystickID = -1;
+			break;
+		}
+	}
 }

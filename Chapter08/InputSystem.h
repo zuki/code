@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -10,6 +10,7 @@
 #include <SDL/SDL_scancode.h>
 #include <SDL/SDL_gamecontroller.h>
 #include <SDL/SDL_mouse.h>
+#include <array>
 #include "MathLocal.h"
 
 // The different button states
@@ -20,6 +21,8 @@ enum ButtonState
 	EReleased,
 	EHeld
 };
+
+const int NUM_CONTROLLERS = 4;
 
 // Helper for keyboard input
 class KeyboardState
@@ -90,6 +93,8 @@ private:
 	float mRightTrigger;
 	// Is this controller connected?
 	bool mIsConnected;
+	// 課題8.1
+	SDL_JoystickID mJoystickID;
 };
 
 // Wrapper that contains current state of input
@@ -97,7 +102,8 @@ struct InputState
 {
 	KeyboardState Keyboard;
 	MouseState Mouse;
-	ControllerState Controller;
+	// 課題8.1
+	std::array<ControllerState, NUM_CONTROLLERS> Controller;
 };
 
 class InputSystem
@@ -120,5 +126,8 @@ private:
 	float Filter1D(int input);
 	Vector2 Filter2D(int inputX, int inputY);
 	InputState mState;
-	SDL_GameController* mController;
+	// 課題8.1
+	std::array<SDL_GameController*, NUM_CONTROLLERS> mController;
+	void AddGameController(int idx);
+	void RemoveGameController(SDL_JoystickID id);
 };
