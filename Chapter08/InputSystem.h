@@ -10,7 +10,9 @@
 #include <SDL/SDL_scancode.h>
 #include <SDL/SDL_gamecontroller.h>
 #include <SDL/SDL_mouse.h>
+#include <unordered_map>
 #include <array>
+#include <string>
 #include "MathLocal.h"
 
 // The different button states
@@ -122,6 +124,9 @@ public:
 	const InputState& GetState() const { return mState; }
 
 	void SetRelativeMouseMode(bool value);
+	// 課題8.2
+	void ReadActionMapping(const std::string& fileName);
+	ButtonState GetMappingButtonState(const std::string& actionName);
 private:
 	float Filter1D(int input);
 	Vector2 Filter2D(int inputX, int inputY);
@@ -130,4 +135,9 @@ private:
 	std::array<SDL_GameController*, NUM_CONTROLLERS> mController;
 	void AddGameController(int idx);
 	void RemoveGameController(SDL_JoystickID id);
+	// 課題8.2
+	std::unordered_multimap<std::string, std::pair<std::string, std::string>> mMapping;
+	SDL_Scancode GetKeyboardScancode(const std::string& name);
+	int GetMouseButton(const std::string& name);
+	SDL_GameControllerButton GetControllerButton(const std::string& name);
 };

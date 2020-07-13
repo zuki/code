@@ -459,6 +459,53 @@ else
 
 ゲームコントローラが1つしかないので、複数の同時使用はテストできないが、ホットスワップは動いているようである。
 
+## 課題8.2
+
+マッピングファイルを次のようにした。このボタン文字列をキーボードの`SDL_Scancode`値、マウスの`int`値、
+コントローラの`SDL_GameControllerButton`値に置き換える簡単な方法がわからない（マクロのトークン連結
+演算子は変数の値を連結できない）。とりあえず、文字列と各値との連想配列を持ち、デバイスごとに文字列から値を
+引く関数を作成したが、なにかいい方法があるのだろうか。また、コントローラは0番に固定とした。
+
+さらに、せっかくアクションを文字列で指定するなら一つのアクションに複数のデバイスボタンにマッピングできるように
+したらと思うが、ある装置の操作を別の装置の操作で引き継ぐことは無理か。そもそもそういう要請がゲームにあるのか
+わからないが。
+
+```
+Fire,Controller,A
+Punch,Controller,B
+Kick,Controller,X
+Headbutt,Controller,Y
+Back,Mouse,Left
+Side,Mouse,Right
+Jump,Keyboard,Space
+Duck,Keyboard,Return
+```
+
+うち、`Fire`と`Back`、`Jump`のみチェックした。
+
+```
+$ ./build/a.out
+2020-07-13 18:08:50.222 a.out[4893:67003] INFO: Fire button press.
+2020-07-13 18:08:50.240 a.out[4893:67003] INFO: Fire button press hold.
+2020-07-13 18:08:50.256 a.out[4893:67003] INFO: Fire button press hold.
+2020-07-13 18:08:50.274 a.out[4893:67003] INFO: Fire button press hold.
+2020-07-13 18:08:50.290 a.out[4893:67003] INFO: Fire button press hold.
+2020-07-13 18:08:50.307 a.out[4893:67003] INFO: Fire button release.
+2020-07-13 18:08:54.577 a.out[4893:67003] INFO: Back button press.
+2020-07-13 18:08:54.593 a.out[4893:67003] INFO: Back button press hold.
+2020-07-13 18:08:54.610 a.out[4893:67003] INFO: Back button press hold.
+2020-07-13 18:08:54.627 a.out[4893:67003] INFO: Back button press hold.
+2020-07-13 18:08:54.643 a.out[4893:67003] INFO: Back button press hold.
+2020-07-13 18:08:54.660 a.out[4893:67003] INFO: Back button press hold.
+2020-07-13 18:08:54.677 a.out[4893:67003] INFO: Back button release.
+2020-07-13 18:08:55.852 a.out[4893:67003] INFO: Jump button press.
+2020-07-13 18:08:55.861 a.out[4893:67003] INFO: Jump button press hold.
+2020-07-13 18:08:55.877 a.out[4893:67003] INFO: Jump button press hold.
+2020-07-13 18:08:55.894 a.out[4893:67003] INFO: Jump button press hold.
+2020-07-13 18:08:55.911 a.out[4893:67003] INFO: Jump button press hold.
+2020-07-13 18:08:55.928 a.out[4893:67003] INFO: Jump button release.
+```
+
 ## 課題9.1
 
 右ボタンを話したときに`mYawSpeed`と`mPitchSpeed`を`0`に、`mUp`を`Vecotor3::UnitZ`に戻したが、

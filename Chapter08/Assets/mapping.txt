@@ -1,0 +1,8 @@
+Fire,Controller,A
+Punch,Controller,B
+Kick,Controller,X
+Headbutt,Controller,Y
+Back,Mouse,Left
+Side,Mouse,Right
+Jump,Keyboard,Space
+Duck,Keyboard,Return
