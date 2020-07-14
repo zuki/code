@@ -5,6 +5,8 @@
 		"QuitButton": "Уволиться",
 		"QuitText": "Вы хотите бросить курить?",
 		"OKButton": "ОК",
-		"CancelButton": "Отмена"
+		"CancelButton": "Отмена",
+		"MainTitle": "ОСНОВНОЕ МЕНЮ",
+		"StartButton": "Начать"
 	}
 }

@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -29,23 +29,24 @@ public:
 	class AudioSystem* GetAudioSystem() { return mAudioSystem; }
 	class PhysWorld* GetPhysWorld() { return mPhysWorld; }
 	class HUD* GetHUD() { return mHUD; }
-	
+
 	// Manage UI stack
 	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
 	void PushUI(class UIScreen* screen);
-	
+
 	class FPSActor* GetPlayer() { return mFPSActor; }
-	
+
 	enum GameState
 	{
+		EMainMenu,
 		EGameplay,
 		EPaused,
 		EQuit
 	};
-	
+
 	GameState GetState() const { return mGameState; }
 	void SetState(GameState state) { mGameState = state; }
-	
+
 	class Font* GetFont(const std::string& fileName);
 
 	void LoadText(const std::string& fileName);
@@ -61,7 +62,7 @@ private:
 	void GenerateOutput();
 	void LoadData();
 	void UnloadData();
-	
+
 	// All the actors in the game
 	std::vector<class Actor*> mActors;
 	std::vector<class UIScreen*> mUIStack;

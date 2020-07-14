@@ -5,6 +5,8 @@
 		"QuitButton": "Quit",
 		"QuitText": "Do you want to quit?",
 		"OKButton": "OK",
-		"CancelButton": "Cancel"
+		"CancelButton": "Cancel",
+		"MainTitle": "MAIN MENU",
+		"StartButton": "Start"
 	}
 }

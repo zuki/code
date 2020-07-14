@@ -19,6 +19,7 @@
 #include "PlaneActor.h"
 #include "TargetActor.h"
 #include "BallActor.h"
+#include "MainMenu.h"
 #include "PauseMenu.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
@@ -79,6 +80,8 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
+
+	new MainMenu(this);
 
 	return true;
 }
@@ -299,7 +302,7 @@ void Game::GenerateOutput()
 void Game::LoadData()
 {
 	// Load English text
-	LoadText("Assets/English.gptext");
+	LoadText("Assets/Japanese.gptext");
 
 	// Create actors
 	Actor* a = nullptr;

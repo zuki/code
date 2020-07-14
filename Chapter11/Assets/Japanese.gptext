@@ -5,6 +5,8 @@
 		"QuitButton": "終了",
 		"QuitText": "本当に終了しますか?",
 		"OKButton": "OK",
-		"CancelButton": "キャンセル"
+		"CancelButton": "キャンセル",
+		"MainTitle": "メインメニュー",
+		"StartButton": "スタート"
 	}
 }
