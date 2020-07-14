@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -34,7 +34,7 @@ Game::Game()
 ,mGameState(EGameplay)
 ,mUpdatingActors(false)
 {
-	
+
 }
 
 bool Game::Initialize()
@@ -68,7 +68,7 @@ bool Game::Initialize()
 
 	// Create the physics world
 	mPhysWorld = new PhysWorld(this);
-	
+
 	// Initialize SDL_ttf
 	if (TTF_Init() != 0)
 	{
@@ -79,7 +79,7 @@ bool Game::Initialize()
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
-	
+
 	return true;
 }
 
@@ -144,7 +144,7 @@ void Game::ProcessInput()
 				break;
 		}
 	}
-	
+
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (mGameState == EGameplay)
 	{
@@ -196,6 +196,12 @@ void Game::HandleKeyPress(int key)
 	{
 		// Load Russian text
 		LoadText("Assets/Russian.gptext");
+		break;
+	}
+	case '3':
+	{
+		// Load Japanese text
+		LoadText("Assets/Japanese.gptext");
 		break;
 	}
 	case SDL_BUTTON_LEFT:
@@ -260,7 +266,7 @@ void Game::UpdateGame()
 
 	// Update audio system
 	mAudioSystem->Update(deltaTime);
-	
+
 	// Update UI screens
 	for (auto ui : mUIStack)
 	{
@@ -319,7 +325,7 @@ void Game::LoadData()
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
 		a->SetRotation(q);
-		
+
 		a = new PlaneActor(this);
 		a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
 		a->SetRotation(q);
@@ -347,7 +353,7 @@ void Game::LoadData()
 
 	// UI elements
 	mHUD = new HUD(this);
-	
+
 	// Start music
 	mMusicEvent = mAudioSystem->PlayEvent("event:/Music");
 
@@ -508,7 +514,7 @@ void Game::LoadText(const std::string& fileName)
 	{
 		if (itr->name.IsString() && itr->value.IsString())
 		{
-			mText.emplace(itr->name.GetString(), 
+			mText.emplace(itr->name.GetString(),
 				itr->value.GetString());
 		}
 	}

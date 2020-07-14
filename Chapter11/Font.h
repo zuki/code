@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include <SDL/SDL_ttf.h>
-#include "Math.h"
+#include "MathLocal.h"
 
 class Font
 {

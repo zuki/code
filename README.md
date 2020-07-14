@@ -576,3 +576,7 @@ $ ./build/a.out
 
     if (max1 < min2 || max2 < min1) 分離
     ```
+
+## 11章
+
+日本語を表示するために[M+ FONTS](http://mplus-fonts.osdn.jp/about.html#license)を使用した。

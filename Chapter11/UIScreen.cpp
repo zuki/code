@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -24,7 +24,8 @@ UIScreen::UIScreen(Game* game)
 {
 	// Add to UI Stack
 	mGame->PushUI(this);
-	mFont = mGame->GetFont("Assets/Carlito-Regular.ttf");
+	//mFont = mGame->GetFont("Assets/Carlito-Regular.ttf");
+	mFont = mGame->GetFont("Assets/mplus-1p-Regular.ttf");
 	mButtonOn = mGame->GetRenderer()->GetTexture("Assets/ButtonYellow.png");
 	mButtonOff = mGame->GetRenderer()->GetTexture("Assets/ButtonBlue.png");
 }
@@ -46,7 +47,7 @@ UIScreen::~UIScreen()
 
 void UIScreen::Update(float deltaTime)
 {
-	
+
 }
 
 void UIScreen::Draw(Shader* shader)
@@ -85,7 +86,7 @@ void UIScreen::ProcessInput(const uint8_t* keys)
 		Vector2 mousePos(static_cast<float>(x), static_cast<float>(y));
 		mousePos.x -= mGame->GetRenderer()->GetScreenWidth() * 0.5f;
 		mousePos.y = mGame->GetRenderer()->GetScreenHeight() * 0.5f - mousePos.y;
-		
+
 		// Highlight any buttons
 		for (auto b : mButtons)
 		{
@@ -144,7 +145,7 @@ void UIScreen::SetTitle(const std::string& text,
 
 void UIScreen::AddButton(const std::string& name, std::function<void()> onClick)
 {
-	Vector2 dims(static_cast<float>(mButtonOn->GetWidth()), 
+	Vector2 dims(static_cast<float>(mButtonOn->GetWidth()),
 		static_cast<float>(mButtonOn->GetHeight()));
 	Button* b = new Button(name, mFont, onClick, mNextButtonPos, dims);
 	mButtons.emplace_back(b);
@@ -164,7 +165,7 @@ void UIScreen::DrawTexture(class Shader* shader, class Texture* texture,
 		1.0f);
 	// Translate to position on screen
 	Matrix4 transMat = Matrix4::CreateTranslation(
-		Vector3(offset.x, offset.y, 0.0f));	
+		Vector3(offset.x, offset.y, 0.0f));
 	// Set world transform
 	Matrix4 world = scaleMat * transMat;
 	shader->SetMatrixUniform("uWorldTransform", world);

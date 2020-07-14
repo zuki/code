@@ -9,7 +9,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <string>
-#include "Math.h"
+#include "MathLocal.h"
 
 class Shader
 {

@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <string>
 #include "SoundEvent.h"
-#include "Math.h"
+#include "MathLocal.h"
 
 // Forward declarations to avoid including FMOD header
 namespace FMOD
