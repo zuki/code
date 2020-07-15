@@ -6,6 +6,7 @@
 MainMenu::MainMenu(Game* game)
     :UIScreen(game)
 {
+    //SDL_Log("Create MainMenu.");
     mGame->SetState(Game::EMainMenu);
     SetRelativeMouseMode(false);
     SetTitle("MainTitle");
@@ -18,20 +19,13 @@ MainMenu::MainMenu(Game* game)
                 mGame->SetState(Game::EQuit);
         });
     });
+    //SDL_Log("MainMenu created.");
 }
 
 MainMenu::~MainMenu()
 {
+    //SDL_Log("Delete MainMenu.");
     SetRelativeMouseMode(true);
     mGame->SetState(Game::EGameplay);
-}
-
-void MainMenu::HandleKeyPress(int key)
-{
-    UIScreen::HandleKeyPress(key);
-
-    if (key == SDLK_ESCAPE)
-	{
-		Close();
-	}
+    //SDL_Log("MainMenu deleted.");
 }

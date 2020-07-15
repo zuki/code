@@ -580,3 +580,23 @@ $ ./build/a.out
 ## 11章
 
 日本語を表示するために[M+ FONTS](http://mplus-fonts.osdn.jp/about.html#license)を使用した。
+
+## 課題11.1
+
+前半部分は特に問題なかった。
+
+後半部分のPauseMenuからMainMenuに移行して再開する操作が、1回目は問題なく動くが、
+2回目に`Segmentation fault`で異常終了するエラーの原因がわからず苦労した。当初のPauseMenuの
+デストラクタでMainMenuを作成するという実装が問題と思われたので、新たに`Game::State`を作成し
+PauseMenuの再開ボタンではこの状態にへんこうするだけで、Gameクラスでそれを見てMainMenuを作成するようにした。
+ちなみに、以下のコードでMainMenuとGenActors()の順番を変えると、GenActors()でHUDがスタックトップにのるため、
+MainMenuのボタンが操作できなくなる。
+
+```
+	else if (mGameState == ERestart)
+	{
+		mGenActors = false;
+		GenActors();
+		new MainMenu(this);
+	}
+```

@@ -34,6 +34,7 @@ Game::Game()
 ,mPhysWorld(nullptr)
 ,mGameState(EGameplay)
 ,mUpdatingActors(false)
+,mGenActors(false)
 {
 
 }
@@ -81,8 +82,6 @@ bool Game::Initialize()
 
 	mTicksCount = SDL_GetTicks();
 
-	new MainMenu(this);
-
 	return true;
 }
 
@@ -109,6 +108,7 @@ void Game::RemovePlane(PlaneActor* plane)
 
 void Game::ProcessInput()
 {
+	//static UIScreen* ui = nullptr;
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
@@ -161,6 +161,13 @@ void Game::ProcessInput()
 	}
 	else if (!mUIStack.empty())
 	{
+	/*
+		if (ui != mUIStack.back())
+		{
+			ui = mUIStack.back();
+			SDL_Log("ui: %s", typeid(*ui).name());
+		}
+	*/
 		mUIStack.back()->ProcessInput(state);
 	}
 }
@@ -292,6 +299,17 @@ void Game::UpdateGame()
 			++iter;
 		}
 	}
+
+	if (mGameState == EGameplay)
+	{
+		GenActors();
+	}
+	else if (mGameState == ERestart)
+	{
+		mGenActors = false;
+		GenActors();
+		new MainMenu(this);
+	}
 }
 
 void Game::GenerateOutput()
@@ -301,8 +319,49 @@ void Game::GenerateOutput()
 
 void Game::LoadData()
 {
-	// Load English text
+	// Load Japanese text
 	LoadText("Assets/Japanese.gptext");
+
+	// Start music
+	mMusicEvent = mAudioSystem->PlayEvent("event:/Music");
+
+	// Enable relative mouse mode for camera look
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	// Make an initial call to get relative to clear out
+	SDL_GetRelativeMouseState(nullptr, nullptr);
+
+	new MainMenu(this);
+}
+
+void Game::UnloadData()
+{
+	// Delete actors
+	// Because ~Actor calls RemoveActor, have to use a different style loop
+	while (!mActors.empty())
+	{
+		delete mActors.back();
+	}
+
+	// Clear the UI stack
+	while (!mUIStack.empty())
+	{
+		delete mUIStack.back();
+		mUIStack.pop_back();
+	}
+
+	if (mRenderer)
+	{
+		mRenderer->UnloadData();
+	}
+}
+
+void Game::GenActors()
+{
+	if (mGenActors)
+	{
+		return;
+	}
+	mGenActors = true;
 
 	// Create actors
 	Actor* a = nullptr;
@@ -357,14 +416,6 @@ void Game::LoadData()
 	// UI elements
 	mHUD = new HUD(this);
 
-	// Start music
-	mMusicEvent = mAudioSystem->PlayEvent("event:/Music");
-
-	// Enable relative mouse mode for camera look
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-	// Make an initial call to get relative to clear out
-	SDL_GetRelativeMouseState(nullptr, nullptr);
-
 	// Different camera actors
 	mFPSActor = new FPSActor(this);
 
@@ -383,28 +434,6 @@ void Game::LoadData()
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(0.0f, 1450.0f, 200.0f));
 	a->SetRotation(Quaternion(Vector3::UnitZ, -Math::PiOver2));
-}
-
-void Game::UnloadData()
-{
-	// Delete actors
-	// Because ~Actor calls RemoveActor, have to use a different style loop
-	while (!mActors.empty())
-	{
-		delete mActors.back();
-	}
-
-	// Clear the UI stack
-	while (!mUIStack.empty())
-	{
-		delete mUIStack.back();
-		mUIStack.pop_back();
-	}
-
-	if (mRenderer)
-	{
-		mRenderer->UnloadData();
-	}
 }
 
 void Game::Shutdown()
@@ -454,6 +483,18 @@ void Game::RemoveActor(Actor* actor)
 		// Swap to end of vector and pop off (avoid erase copies)
 		std::iter_swap(iter, mActors.end() - 1);
 		mActors.pop_back();
+	}
+}
+
+void Game::RemoveAllActors()
+{
+	while (!mPendingActors.empty())
+	{
+		delete mPendingActors.back();
+	}
+	while (!mActors.empty())
+	{
+		delete mActors.back();
 	}
 }
 

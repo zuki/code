@@ -7,6 +7,8 @@
 		"OKButton": "OK",
 		"CancelButton": "Cancel",
 		"MainTitle": "MAIN MENU",
-		"StartButton": "Start"
+		"StartButton": "Start",
+		"RestartButton": "Restart",
+		"RestartText": "Do you want to restart?"
 	}
 }

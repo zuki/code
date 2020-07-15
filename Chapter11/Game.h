@@ -24,6 +24,8 @@ public:
 
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
+	// 課題11.1
+	void RemoveAllActors();
 
 	class Renderer* GetRenderer() { return mRenderer; }
 	class AudioSystem* GetAudioSystem() { return mAudioSystem; }
@@ -41,6 +43,7 @@ public:
 		EMainMenu,
 		EGameplay,
 		EPaused,
+		ERestart,
 		EQuit
 	};
 
@@ -55,6 +58,10 @@ public:
 	void AddPlane(class PlaneActor* plane);
 	void RemovePlane(class PlaneActor* plane);
 	std::vector<class PlaneActor*>& GetPlanes() { return mPlanes; }
+	// 課題11.1 Actorsを作成
+	void SetGenActors(bool gen) { mGenActors = gen; }
+	void GenActors();
+
 private:
 	void ProcessInput();
 	void HandleKeyPress(int key);
@@ -82,6 +89,8 @@ private:
 	GameState mGameState;
 	// Track if we're updating actors right now
 	bool mUpdatingActors;
+	// 課題11.1 Actorsを作成するか
+	bool mGenActors;
 
 	// Game-specific code
 	std::vector<class PlaneActor*> mPlanes;
