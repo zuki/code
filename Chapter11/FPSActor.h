@@ -1,13 +1,14 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
 
 #pragma once
 #include "Actor.h"
+#include "BoxComponent.h"
 #include "SoundEvent.h"
 
 class FPSActor : public Actor
@@ -25,6 +26,9 @@ public:
 	void SetVisible(bool visible);
 
 	void FixCollisions();
+
+	// 課題11.2
+	BoxComponent* GetBoxComponent() { return mBoxComp; }
 private:
 	class MoveComponent* mMoveComp;
 	class AudioComponent* mAudioComp;

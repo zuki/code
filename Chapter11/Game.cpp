@@ -376,7 +376,7 @@ void Game::GenActors()
 		for (int j = 0; j < 10; j++)
 		{
 			a = new PlaneActor(this);
-			a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
+			a->SetPosition(Vector3(start + i * size, start + j * size, -200.0f));
 		}
 	}
 
@@ -421,18 +421,18 @@ void Game::GenActors()
 
 	// Create target actors
 	a = new TargetActor(this);
-	a->SetPosition(Vector3(1450.0f, 0.0f, 100.0f));
+	a->SetPosition(Vector3(1450.0f, 0.0f, 50.0f));
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(1450.0f, 0.0f, 400.0f));
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(1450.0f, -500.0f, 200.0f));
 	a = new TargetActor(this);
-	a->SetPosition(Vector3(1450.0f, 500.0f, 200.0f));
+	a->SetPosition(Vector3(1450.0f, 500.0f, -100.0f));
 	a = new TargetActor(this);
-	a->SetPosition(Vector3(0.0f, -1450.0f, 200.0f));
+	a->SetPosition(Vector3(0.0f, -1450.0f, -100.0f));
 	a->SetRotation(Quaternion(Vector3::UnitZ, Math::PiOver2));
 	a = new TargetActor(this);
-	a->SetPosition(Vector3(0.0f, 1450.0f, 200.0f));
+	a->SetPosition(Vector3(0.0f, 1450.0f, 100.0f));
 	a->SetRotation(Quaternion(Vector3::UnitZ, -Math::PiOver2));
 }
 

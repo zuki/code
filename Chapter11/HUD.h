@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -19,24 +19,28 @@ public:
 
 	void Update(float deltaTime) override;
 	void Draw(class Shader* shader) override;
-	
+
 	void AddTargetComponent(class TargetComponent* tc);
 	void RemoveTargetComponent(class TargetComponent* tc);
 protected:
 	void UpdateCrosshair(float deltaTime);
 	void UpdateRadar(float deltaTime);
-	
+
 	class Texture* mHealthBar;
 	class Texture* mRadar;
 	class Texture* mCrosshair;
 	class Texture* mCrosshairEnemy;
+	// 課題11.2
 	class Texture* mBlipTex;
+	class Texture* mBlipDownTex;
+	class Texture* mBlipUpTex;
 	class Texture* mRadarArrow;
-	
+
 	// All the target components in the game
 	std::vector<class TargetComponent*> mTargetComps;
-	// 2D offsets of blips relative to radar
-	std::vector<Vector2> mBlips;
+	// 課題11.2
+	// 3次元とし、x軸とy軸はレーダー相対のblipの2Dオフセット、ｚ軸はプレーヤより上下かで -1, 0, +1 の3値とする
+	std::vector<Vector3> mBlips;
 	// Adjust range of radar and radius
 	float mRadarRange;
 	float mRadarRadius;
