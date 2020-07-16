@@ -30,6 +30,13 @@ PauseMenu::PauseMenu(Game* game)
 				Close();
 		});
 	});
+	AddButton("QuitButton", [this]() {
+		new DialogBox(mGame, "QuitText",
+			[this]() {
+				mGame->SetState(Game::EQuit);
+		});
+	});
+
 	//SDL_Log("PauseMenu created.");
 }
 
