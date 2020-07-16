@@ -1,7 +1,7 @@
 // ----------------------------------------------------------------
 // From Game Programming in C++ by Sanjay Madhav
 // Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
+//
 // Released under the BSD License
 // See LICENSE in root directory for full details.
 // ----------------------------------------------------------------
@@ -23,7 +23,7 @@ public:
 
 	// Set the name of the button
 	void SetName(const std::string& name);
-	
+
 	// Getters/setters
 	class Texture* GetNameTex() { return mNameTex; }
 	const Vector2& GetPosition() const { return mPosition; }
@@ -74,11 +74,11 @@ protected:
 	// Helper to draw a texture
 	void DrawTexture(class Shader* shader, class Texture* texture,
 					 const Vector2& offset = Vector2::Zero,
-					 float scale = 1.0f);
+					 float scale = 1.0f, float angle = 0.0f);
 	// Sets the mouse mode to relative or not
 	void SetRelativeMouseMode(bool relative);
 	class Game* mGame;
-	
+
 	class Font* mFont;
 	class Texture* mTitle;
 	class Texture* mBackground;

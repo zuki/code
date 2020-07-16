@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "PhysWorld.h"
 #include "FPSActor.h"
+#include "ArrowTarget.h"
 #include <algorithm>
 #include "TargetComponent.h"
 
@@ -21,6 +22,7 @@ HUD::HUD(Game* game)
 	,mRadarRange(2000.0f)
 	,mRadarRadius(92.0f)
 	,mTargetEnemy(false)
+	,mArrowAngle(0.0f)
 {
 	Renderer* r = mGame->GetRenderer();
 	mHealthBar = r->GetTexture("Assets/HealthBar.png");
@@ -32,6 +34,8 @@ HUD::HUD(Game* game)
 	mBlipDownTex = r->GetTexture("Assets/BlipDown.png");
 	mBlipUpTex = r->GetTexture("Assets/BlipUp.png");
 	mRadarArrow = r->GetTexture("Assets/RadarArrow.png");
+	// 課題 11.3
+	mArrowTex = r->GetTexture("Assets/Arrow.png");
 }
 
 HUD::~HUD()
@@ -43,6 +47,7 @@ void HUD::Update(float deltaTime)
 	UIScreen::Update(deltaTime);
 
 	UpdateCrosshair(deltaTime);
+	UpdateArrow(deltaTime);
 	UpdateRadar(deltaTime);
 }
 
@@ -64,6 +69,10 @@ void HUD::Draw(Shader* shader)
 	}
 	// Radar arrow
 	DrawTexture(shader, mRadarArrow, cRadarPos);
+
+	// 課題11.3
+	const Vector2 cArrowPos(390.0f, 275.0f);
+	DrawTexture(shader, mArrowTex, cArrowPos, 1.0f, mArrowAngle);
 
 	//// Health bar
 	//DrawTexture(shader, mHealthBar, Vector2(-350.0f, -350.0f));
@@ -159,5 +168,32 @@ void HUD::UpdateRadar(float deltaTime)
 			blipPos = Vector2::Transform(blipPos, rotMat);
 			mBlips.emplace_back(Vector3(blipPos.x, blipPos.y, targetPosZ));
 		}
+	}
+}
+
+void HUD::UpdateArrow(float deltaTime)
+{
+	Vector3 playerPos = mGame->GetPlayer()->GetPosition();
+	Vector2 playerPos2D(playerPos.y, playerPos.x);
+
+	Vector3 targetPos = mArrow->GetPosition();
+	Vector2 targetPos2D(targetPos.y, targetPos.x);
+
+	Vector2 playerToTarget = targetPos2D - playerPos2D;
+	playerToTarget.Normalize();
+
+	Vector3 playerForward = mGame->GetPlayer()->GetForward();
+	Vector2 playerForward2D(playerForward.y, playerForward.x);
+
+	float dot = Vector2::Dot(playerForward2D, playerToTarget);
+	mArrowAngle = Math::Acos(dot);
+
+	// ArrowTargetが左右どちらにあるかを判定して、左にあったら回転角を負にする。
+	// 左右の判定は、前方ベクトルを右に90度回転させたものとの内積が正なら右、負なら左である。
+	Vector2 player90R2D = Vector2(-1.0f * playerForward2D.y, playerForward2D.x);
+	float dot2 = Vector2::Dot(player902D, playerToTarget);
+	if (dot2 < 0)
+	{
+		mArrowAngle *= -1.0f;
 	}
 }

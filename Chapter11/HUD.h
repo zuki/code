@@ -22,9 +22,14 @@ public:
 
 	void AddTargetComponent(class TargetComponent* tc);
 	void RemoveTargetComponent(class TargetComponent* tc);
+
+	// 課題11.3
+	void SetArrowTarget(class ArrowTarget* arrow) { mArrow = arrow; }
 protected:
 	void UpdateCrosshair(float deltaTime);
 	void UpdateRadar(float deltaTime);
+	// 課題11.3
+	void UpdateArrow(float deltaTime);
 
 	class Texture* mHealthBar;
 	class Texture* mRadar;
@@ -35,6 +40,8 @@ protected:
 	class Texture* mBlipDownTex;
 	class Texture* mBlipUpTex;
 	class Texture* mRadarArrow;
+	// 課題11.3
+	class Texture* mArrowTex;
 
 	// All the target components in the game
 	std::vector<class TargetComponent*> mTargetComps;
@@ -46,4 +53,7 @@ protected:
 	float mRadarRadius;
 	// Whether the crosshair targets an enemy
 	bool mTargetEnemy;
+	// 課題11.3
+	class ArrowTarget* mArrow;
+	float mArrowAngle;
 };

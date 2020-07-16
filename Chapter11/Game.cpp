@@ -19,6 +19,7 @@
 #include "PlaneActor.h"
 #include "TargetActor.h"
 #include "BallActor.h"
+#include "ArrowTarget.h"
 #include "MainMenu.h"
 #include "PauseMenu.h"
 #include <SDL/SDL.h>
@@ -434,6 +435,10 @@ void Game::GenActors()
 	a = new TargetActor(this);
 	a->SetPosition(Vector3(0.0f, 1450.0f, 100.0f));
 	a->SetRotation(Quaternion(Vector3::UnitZ, -Math::PiOver2));
+
+	// 課題11.3
+	a = new ArrowTarget(this);
+	a->SetPosition(Vector3(0.0f, 1450.0f, 100.0f));
 }
 
 void Game::Shutdown()
