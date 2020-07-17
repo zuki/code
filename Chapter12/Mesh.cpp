@@ -14,7 +14,7 @@
 #include <sstream>
 #include <rapidjson/document.h>
 #include <SDL/SDL_log.h>
-#include "Math.h"
+#include "MathLocal.h"
 
 namespace
 {

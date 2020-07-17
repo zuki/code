@@ -9,7 +9,7 @@
 #pragma once
 #include <vector>
 #include <functional>
-#include "Math.h"
+#include "MathLocal.h"
 #include "Collision.h"
 
 class PhysWorld

@@ -11,7 +11,7 @@
 #include <vector>
 #include <unordered_map>
 #include <SDL/SDL.h>
-#include "Math.h"
+#include "MathLocal.h"
 
 struct DirectionalLight
 {

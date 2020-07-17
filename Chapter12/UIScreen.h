@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 #pragma once
-#include "Math.h"
+#include "MathLocal.h"
 #include <cstdint>
 #include <string>
 #include <functional>

@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------
 
 #pragma once
-#include "Math.h"
+#include "MathLocal.h"
 
 const size_t MAX_SKELETON_BONES = 96;
 

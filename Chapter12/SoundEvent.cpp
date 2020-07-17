@@ -80,7 +80,7 @@ void SoundEvent::SetParameter(const std::string& name, float value)
 	auto event = mSystem ? mSystem->GetEventInstance(mID) : nullptr;
 	if (event)
 	{
-		event->setParameterValue(name.c_str(), value);
+		event->setParameterByName(name.c_str(), value);
 	}
 }
 
@@ -123,7 +123,7 @@ float SoundEvent::GetParameter(const std::string& name)
 	auto event = mSystem ? mSystem->GetEventInstance(mID) : nullptr;
 	if (event)
 	{
-		event->getParameterValue(name.c_str(), &retVal);
+		event->getParameterByName(name.c_str(), &retVal);
 	}
 	return retVal;
 }

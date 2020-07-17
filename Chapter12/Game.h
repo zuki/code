@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include "Math.h"
+#include "MathLocal.h"
 #include "SoundEvent.h"
 #include <SDL/SDL_types.h>
 

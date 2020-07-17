@@ -11,7 +11,7 @@
 #include "Game.h"
 #include "PhysWorld.h"
 #include "TargetComponent.h"
-#include "Math.h"
+#include "MathLocal.h"
 #include "Game.h"
 #include "HUD.h"
 
